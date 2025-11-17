@@ -19,6 +19,7 @@ initial_angle = 45
 balle = None  # Initialiser la balle à None
 cible = Cible.Cible(width, height)
 tank = Tank.Tank(20, 600)  # Position initiale du tank
+afficher_cible=False
 
 balles = []      # Liste pour stocker les balles
 particules = []  # Liste pour stocker les particules
@@ -61,7 +62,9 @@ while running:
             for _ in range(100):  # Créer des particules à la position de la balle
                 particules.append(Particule.Particule(position_disparition[0], position_disparition[1]))
 
-    if balle is not None and balle.visible:  # Vérifier la collision avec la cible
+
+
+    if balle is not None and balle.visible and afficher_cible:  # Vérifier la collision avec la cible
         balle_rect = pygame.Rect(balle.x - balle.rayon, balle.y - balle.rayon, balle.rayon * 2, balle.rayon * 2)
         cible_rect = pygame.Rect(cible.x, cible.y, cible.width, cible.height)
         if balle_rect.colliderect(cible_rect):
@@ -73,7 +76,8 @@ while running:
 
     if balle is not None:  # Dessiner la balle et la cible
         balle.draw(screen)
-    cible.draw(screen)
+    if afficher_cible:
+        cible.draw(screen)
 
     for particule in particules:  # Mettre à jour et dessiner les particules
         particule.update()
