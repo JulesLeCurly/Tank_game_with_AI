@@ -4,7 +4,7 @@ import Function.core.Balle as Balle
 import Function.core.Tank as Tank
 import Function.core.Cible as Cible
 import Function.core.Particule as Particule
-import Function.core.Environnement as Environnement
+from Function.core.Environnement import Environnement
 
 
 pygame.init()  # Initialiser Pygame
@@ -12,7 +12,6 @@ width, height = 1200, 650
 screen = pygame.display.set_mode((width, height))
 clock = pygame.time.Clock()
 env = Environnement()
-env.draw_ground(screen)
 
 # Créer une instance de Balle, Cible et Tank
 initial_vitesse1 = 10
@@ -118,6 +117,7 @@ while running:
             cible.reset_position()  # Réinitialiser la position de la cible
 
     screen.fill((0, 0, 0))  # Effacer l'écran
+    env.draw_ground(screen)
     tank1.draw(screen, initial_angle1)  # Dessiner le tank1
     tank2.draw(screen, initial_angle2)  # Dessiner le tank2
 
