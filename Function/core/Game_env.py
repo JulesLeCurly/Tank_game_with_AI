@@ -4,13 +4,15 @@ import Function.core.Balle as Balle
 import Function.core.Tank as Tank
 import Function.core.Cible as Cible
 import Function.core.Particule as Particule
-
+import Function.core.Environnement as Environnement
 
 
 pygame.init()  # Initialiser Pygame
 width, height = 1200, 650
 screen = pygame.display.set_mode((width, height))
 clock = pygame.time.Clock()
+env = Environnement()
+env.draw_ground(screen)
 
 # Créer une instance de Balle, Cible et Tank
 initial_vitesse1 = 10
