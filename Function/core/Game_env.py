@@ -13,12 +13,16 @@ screen = pygame.display.set_mode((width, height))
 clock = pygame.time.Clock()
 
 # Créer une instance de Balle, Cible et Tank
-initial_vitesse = 10
-max_vitesse = 35
-initial_angle = 45
+initial_vitesse1 = 10
+max_vitesse1 = 35
+initial_angle1 = 45
+initial_vitesse2 = 10
+max_vitesse2 = 35
+initial_angle2 = 125
 balle = None  # Initialiser la balle à None
 cible = Cible.Cible(width, height)
-tank = Tank.Tank(20, 600)  # Position initiale du tank
+tank1 = Tank.Tank(20, 600)  # Position initiale du tank1
+tank2 = Tank.Tank(1080, 600)  # Position initiale du tank2
 afficher_cible=False
 
 balles = []      # Liste pour stocker les balles
@@ -31,30 +35,67 @@ while running:
             running = False
 
     keys = pygame.key.get_pressed()  # Gérer les entrées
-    tank.update(keys)  # Mettre à jour la position du tank
+    tank1.update(keys)  # Mettre à jour la position du tank
+    tank2.update(keys)  # Mettre à jour la position du tank
 
     if keys[pygame.K_LEFT]:  # Augmenter l'angle
-        initial_angle = min(180, initial_angle + 0.8)  # Ne pas dépasser 180
+        initial_angle1 = min(180, initial_angle1 + 0.8)  # Ne pas dépasser 180
     if keys[pygame.K_RIGHT]:  # Diminuer l'angle
-        initial_angle = max(0, initial_angle - 0.8)
+        initial_angle1 = max(0, initial_angle1 - 0.8)
     if keys[pygame.K_DOWN]:  # Diminuer la vitesse
-        initial_vitesse = max(1, initial_vitesse - 0.3)  # Ne pas descendre en dessous de 1
+        initial_vitesse1 = max(1, initial_vitesse1 - 0.3)  # Ne pas descendre en dessous de 1
     if keys[pygame.K_UP]:  # Augmenter la vitesse
-        initial_vitesse += 0.3
-        if initial_vitesse > max_vitesse:
-            initial_vitesse = max_vitesse
+        initial_vitesse1 += 0.3
+        if initial_vitesse1 > max_vitesse1:
+            initial_vitesse1 = max_vitesse1
     if keys[pygame.K_SPACE]:  # Tirer la balle avec la touche espace
         if balle is None or not balle.visible:  # Si aucune balle n'est active
-            cannon_end_x, cannon_end_y = tank.draw(screen, initial_angle)  # Obtenir la position de l'extrémité du canon
+            cannon_end_x, cannon_end_y = tank1.draw(screen, initial_angle1)  # Obtenir la position de l'extrémité du canon
             balle = Balle.Balle(
                 width,
                 height,
                 cannon_end_x,
                 cannon_end_y, 5,
-                initial_angle,
-                initial_vitesse,
-                tank.vitesse * tank.direction
+                initial_angle1,
+                initial_vitesse1,
+                tank1.vitesse * tank1.direction
             )  # Créer la balle à la position du canon
+
+
+
+    # Modifier l'angle
+    if keys[pygame.K_KP1]:  # Augmenter l'angle
+        initial_angle2 = min(180, initial_angle2 + 0.8)
+    if keys[pygame.K_KP3]:  # Diminuer l'angle
+        initial_angle2 = max(0, initial_angle2 - 0.8)
+
+    # Modifier la vitesse (puissance)
+    if keys[pygame.K_KP5]:  # Diminuer la puissance
+        initial_vitesse2 = max(1, initial_vitesse2 - 0.3)
+    if keys[pygame.K_KP2]:  # Augmenter la puissance
+        initial_vitesse2 = min(max_vitesse2, initial_vitesse2 + 0.3)
+
+    # Déplacement du tank
+    if keys[pygame.K_k]:  # Aller à gauche (AZERTY)
+        tank2.x -= tank2.vitesse
+    if keys[pygame.K_m]:  # Aller à droite (AZERTY)
+        tank2.x += tank2.vitesse
+
+    # Tir
+    if keys[pygame.K_RETURN]:  # Tir avec Entrée
+        if balle is None or not balle.visible:
+            cannon_end_x, cannon_end_y = tank2.draw(screen, initial_angle2)
+            balle = Balle.Balle(
+                width,
+                height,
+                cannon_end_x,
+                cannon_end_y,
+                5,
+                initial_angle2,
+                initial_vitesse2,
+                tank2.vitesse * tank2.direction
+            )
+
 
     if balle is not None:  # Mettre à jour la balle et vérifier si elle disparaît
         position_disparition = balle.update()
@@ -72,7 +113,8 @@ while running:
             cible.reset_position()  # Réinitialiser la position de la cible
 
     screen.fill((0, 0, 0))  # Effacer l'écran
-    tank.draw(screen, initial_angle)  # Dessiner le tank
+    tank1.draw(screen, initial_angle1)  # Dessiner le tank1
+    tank2.draw(screen, initial_angle2)  # Dessiner le tank2
 
     if balle is not None:  # Dessiner la balle et la cible
         balle.draw(screen)
@@ -85,8 +127,8 @@ while running:
 
     particules = [p for p in particules if p.lifetime > 0]  # Supprimer les particules qui ont expiré
     font = pygame.font.Font(None, 36)  # Afficher les paramètres actuels
-    vitesse_text = font.render(f"Vitesse: {round(initial_vitesse)}", True, (255, 255, 255))
-    angle_text = font.render(f"Angle: {round(initial_angle)}°", True, (255, 255, 255))
+    vitesse_text = font.render(f"Vitesse: {round(initial_vitesse1)}", True, (255, 255, 255))
+    angle_text = font.render(f"Angle: {round(initial_angle1)}°", True, (255, 255, 255))
     score_text = font.render(f"Score: {score}", True, (255, 255, 255))                          # Afficher le score
 
     screen.blit(vitesse_text, (10, 10))  # Afficher la vitesse en haut à gauche
