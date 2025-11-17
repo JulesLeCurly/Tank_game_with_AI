@@ -35,8 +35,6 @@ while running:
             running = False
 
     keys = pygame.key.get_pressed()  # Gérer les entrées
-    tank1.update(keys)  # Mettre à jour la position du tank
-    tank2.update(keys)  # Mettre à jour la position du tank
 
     if keys[pygame.K_LEFT]:  # Augmenter l'angle
         initial_angle1 = min(180, initial_angle1 + 0.8)  # Ne pas dépasser 180
@@ -48,6 +46,11 @@ while running:
         initial_vitesse1 += 0.3
         if initial_vitesse1 > max_vitesse1:
             initial_vitesse1 = max_vitesse1
+    # Déplacement du tank
+    if keys[pygame.K_q]:  # Aller à gauche (AZERTY)
+        tank1.x -= tank1.vitesse
+    if keys[pygame.K_d]:  # Aller à droite (AZERTY)
+        tank1.x += tank1.vitesse
     if keys[pygame.K_SPACE]:  # Tirer la balle avec la touche espace
         if balle is None or not balle.visible:  # Si aucune balle n'est active
             cannon_end_x, cannon_end_y = tank1.draw(screen, initial_angle1)  # Obtenir la position de l'extrémité du canon

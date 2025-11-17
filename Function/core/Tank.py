@@ -23,15 +23,6 @@ class Tank:  # Classe pour représenter le tank
             (width * Taille, height * Taille)
         )
 
-    def update(self, keys):
-        if keys[pygame.K_d]:  # Avancer
-            self.x += self.vitesse
-            self.direction = 1
-        elif keys[pygame.K_q]:  # Reculer
-            self.x -= self.vitesse
-            self.direction = -1
-        else:
-            self.direction = 0
 
     def draw(self, screen, angle):  # Dessiner le char
         screen.blit(self.Tank, (self.x, self.y))
