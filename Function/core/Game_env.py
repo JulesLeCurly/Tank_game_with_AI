@@ -36,13 +36,13 @@ while running:
 
     keys = pygame.key.get_pressed()  # Gérer les entrées
 
-    if keys[pygame.K_LEFT]:  # Augmenter l'angle
+    if keys[pygame.K_a]:  # Augmenter l'angle
         initial_angle1 = min(180, initial_angle1 + 0.8)  # Ne pas dépasser 180
-    if keys[pygame.K_RIGHT]:  # Diminuer l'angle
+    if keys[pygame.K_e]:  # Diminuer l'angle
         initial_angle1 = max(0, initial_angle1 - 0.8)
-    if keys[pygame.K_DOWN]:  # Diminuer la vitesse
+    if keys[pygame.K_s]:  # Diminuer la vitesse
         initial_vitesse1 = max(1, initial_vitesse1 - 0.3)  # Ne pas descendre en dessous de 1
-    if keys[pygame.K_UP]:  # Augmenter la vitesse
+    if keys[pygame.K_z]:  # Augmenter la vitesse
         initial_vitesse1 += 0.3
         if initial_vitesse1 > max_vitesse1:
             initial_vitesse1 = max_vitesse1
@@ -51,7 +51,7 @@ while running:
         tank1.x -= tank1.vitesse
     if keys[pygame.K_d]:  # Aller à droite (AZERTY)
         tank1.x += tank1.vitesse
-    if keys[pygame.K_SPACE]:  # Tirer la balle avec la touche espace
+    if keys[pygame.K_f]:  # Tirer la balle avec la touche espace
         if balle is None or not balle.visible:  # Si aucune balle n'est active
             cannon_end_x, cannon_end_y = tank1.draw(screen, initial_angle1)  # Obtenir la position de l'extrémité du canon
             balle = Balle.Balle(
@@ -67,15 +67,15 @@ while running:
 
 
     # Modifier l'angle
-    if keys[pygame.K_KP1]:  # Augmenter l'angle
+    if keys[pygame.K_i]:  # Augmenter l'angle
         initial_angle2 = min(180, initial_angle2 + 0.8)
-    if keys[pygame.K_KP3]:  # Diminuer l'angle
+    if keys[pygame.K_p]:  # Diminuer l'angle
         initial_angle2 = max(0, initial_angle2 - 0.8)
 
     # Modifier la vitesse (puissance)
-    if keys[pygame.K_KP2]:  # Diminuer la puissance
+    if keys[pygame.K_l]:  # Diminuer la puissance
         initial_vitesse2 = max(1, initial_vitesse2 - 0.3)
-    if keys[pygame.K_KP5]:  # Augmenter la puissance
+    if keys[pygame.K_o]:  # Augmenter la puissance
         initial_vitesse2 = min(max_vitesse2, initial_vitesse2 + 0.3)
 
     # Déplacement du tank
@@ -85,7 +85,7 @@ while running:
         tank2.x += tank2.vitesse
 
     # Tir
-    if keys[pygame.K_RETURN]:  # Tir avec Entrée
+    if keys[pygame.K_j]:  # Tir avec Entrée
         if balle is None or not balle.visible:
             cannon_end_x, cannon_end_y = tank2.draw(screen, initial_angle2)
             balle = Balle.Balle(
