@@ -219,13 +219,13 @@ while running:
     tank.update(keys)  # Mettre à jour la position du tank
 
     if keys[pygame.K_LEFT]:  # Augmenter l'angle
-        initial_angle = min(180, initial_angle + 0.4)  # Ne pas dépasser 180
+        initial_angle = min(180, initial_angle + 0.8)  # Ne pas dépasser 180
     if keys[pygame.K_RIGHT]:  # Diminuer l'angle
-        initial_angle = max(0, initial_angle - 0.4)
+        initial_angle = max(0, initial_angle - 0.8)
     if keys[pygame.K_DOWN]:  # Diminuer la vitesse
-        initial_vitesse = max(1, initial_vitesse - 0.1)  # Ne pas descendre en dessous de 1
+        initial_vitesse = max(1, initial_vitesse - 0.3)  # Ne pas descendre en dessous de 1
     if keys[pygame.K_UP]:  # Augmenter la vitesse
-        initial_vitesse += 0.1
+        initial_vitesse += 0.3
         if initial_vitesse > max_vitesse:
             initial_vitesse = max_vitesse
     if keys[pygame.K_SPACE]:  # Tirer la balle avec la touche espace
