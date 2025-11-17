@@ -73,9 +73,9 @@ while running:
         initial_angle2 = max(0, initial_angle2 - 0.8)
 
     # Modifier la vitesse (puissance)
-    if keys[pygame.K_KP5]:  # Diminuer la puissance
+    if keys[pygame.K_KP2]:  # Diminuer la puissance
         initial_vitesse2 = max(1, initial_vitesse2 - 0.3)
-    if keys[pygame.K_KP2]:  # Augmenter la puissance
+    if keys[pygame.K_KP5]:  # Augmenter la puissance
         initial_vitesse2 = min(max_vitesse2, initial_vitesse2 + 0.3)
 
     # Déplacement du tank
@@ -130,13 +130,20 @@ while running:
 
     particules = [p for p in particules if p.lifetime > 0]  # Supprimer les particules qui ont expiré
     font = pygame.font.Font(None, 36)  # Afficher les paramètres actuels
-    vitesse_text = font.render(f"Vitesse: {round(initial_vitesse1)}", True, (255, 255, 255))
-    angle_text = font.render(f"Angle: {round(initial_angle1)}°", True, (255, 255, 255))
-    score_text = font.render(f"Score: {score}", True, (255, 255, 255))                          # Afficher le score
+    vitesse_text1 = font.render(f"Vitesse: {round(initial_vitesse1)}", True, (255, 255, 255))
+    angle_text1 = font.render(f"Angle: {round(initial_angle1)}°", True, (255, 255, 255))
+    score_text1 = font.render(f"Score: {score}", True, (255, 255, 255))                          # Afficher le score
+    vitesse_text2 = font.render(f"Vitesse: {round(initial_vitesse2)}", True, (255, 255, 255))
+    angle_text2 = font.render(f"Angle: {round(initial_angle2)}°", True, (255, 255, 255))
+    score_text2 = font.render(f"Score: {score}", True, (255, 255, 255))                          # Afficher le score
 
-    screen.blit(vitesse_text, (10, 10))  # Afficher la vitesse en haut à gauche
-    screen.blit(angle_text, (10, 50))    # Afficher l'angle en dessous de la vitesse
-    screen.blit(score_text, (10, 90))    # Afficher le score en dessous de l'angle
+    screen.blit(vitesse_text1, (10, 10))  # Afficher la vitesse en haut à gauche
+    screen.blit(angle_text1, (10, 50))    # Afficher l'angle en dessous de la vitesse
+    screen.blit(score_text1, (10, 90))    # Afficher le score en dessous de l'angle
+    screen.blit(vitesse_text2, (1040, 10))  # Afficher la vitesse en haut à gauche
+    screen.blit(angle_text2, (1040, 50))    # Afficher l'angle en dessous de la vitesse
+    screen.blit(score_text2, (1040, 90))    # Afficher le score en dessous de l'angle
+
 
     pygame.display.flip()                # Mettre à jour l'affichage
     clock.tick(60)                       # Limiter la boucle à 60 FPS
