@@ -22,8 +22,8 @@ max_vitesse2 = 35
 initial_angle2 = 125
 balle = None  # Initialiser la balle à None
 cible = Cible.Cible(width, height)
-tank1 = Tank.Tank(20, 600)  # Position initiale du tank1
-tank2 = Tank.Tank(1080, 600)  # Position initiale du tank2
+tank1 = Tank.Tank(20, 540)  # Position initiale du tank1
+tank2 = Tank.Tank(1080, 540)  # Position initiale du tank2
 afficher_cible=False
 
 balles = []      # Liste pour stocker les balles
