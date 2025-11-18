@@ -56,7 +56,7 @@ class Tank:
 
         # Position canon
         cannon_length = 40
-        cannon_start = (self.x + self.draw_width / 2, self.y + 10)
+        cannon_start = (self.x + self.draw_width / 2 - 2.5, self.y + 10)
 
         cannon_end_x = cannon_start[0] + cannon_length * math.cos(math.radians(angle))
         cannon_end_y = cannon_start[1] - cannon_length * math.sin(math.radians(angle))
