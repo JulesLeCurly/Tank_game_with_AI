@@ -52,6 +52,7 @@ while running:
     keys = pygame.key.get_pressed()  # Gérer les entrées
 
     if keys[pygame.K_a]:  # Augmenter l'angle
+        Tanks_class["red"].angle = min(180, Tanks_class["red"].angle + 0.8)
         initial_angle1 = min(180, initial_angle1 + 0.8)  # Ne pas dépasser 180
     if keys[pygame.K_e]:  # Diminuer l'angle
         initial_angle1 = max(0, initial_angle1 - 0.8)
