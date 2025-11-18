@@ -55,7 +55,7 @@ while running:
     if keys[pygame.K_f]:  # Tirer la balle avec la touche espace
         if balle is None or not balle.visible:  # Si aucune balle n'est active
             cannon_end_x, cannon_end_y = tank1.draw(screen, initial_angle1)  # Obtenir la position de l'extrémité du canon
-            balle = Balle.Balle(
+            balles.append(Balle.Balle(
                 width,
                 height,
                 cannon_end_x,
@@ -63,7 +63,7 @@ while running:
                 initial_angle1,
                 initial_vitesse1,
                 tank1.vitesse * tank1.direction
-            )  # Créer la balle à la position du canon
+            ))  # Créer la balle à la position du canon
 
 
 
@@ -87,25 +87,25 @@ while running:
 
     # Tir
     if keys[pygame.K_j]:  # Tir avec Entrée
-        if balle is None or not balle.visible:
-            cannon_end_x, cannon_end_y = tank2.draw(screen, initial_angle2)
-            balle = Balle.Balle(
-                width,
-                height,
-                cannon_end_x,
-                cannon_end_y,
-                5,
-                initial_angle2,
-                initial_vitesse2,
-                tank2.vitesse * tank2.direction
-            )
+        cannon_end_x, cannon_end_y = tank2.draw(screen, initial_angle2)
+        balles.append(Balle.Balle(
+            width,
+            height,
+            cannon_end_x,
+            cannon_end_y,
+            5,
+            initial_angle2,
+            initial_vitesse2,
+            tank2.vitesse * tank2.direction
+        ))
 
 
-    if balle is not None:  # Mettre à jour la balle et vérifier si elle disparaît
-        position_disparition = balle.update()
-        if position_disparition:
-            for _ in range(100):  # Créer des particules à la position de la balle
-                particules.append(Particule.Particule(position_disparition[0], position_disparition[1]))
+    if balles != []:  # Mettre à jour la balle et vérifier si elle disparaît
+        for balle in balles:
+            position_disparition = balle.update()
+            if position_disparition:
+                for _ in range(100):  # Créer des particules à la position de la balle
+                    particules.append(Particule.Particule(position_disparition[0], position_disparition[1]))
 
 
 
@@ -120,9 +120,10 @@ while running:
     env.draw_ground(screen)
     tank1.draw(screen, initial_angle1)  # Dessiner le tank1
     tank2.draw(screen, initial_angle2)  # Dessiner le tank2
-
-    if balle is not None:  # Dessiner la balle et la cible
-        balle.draw(screen)
+    
+    if balles != []:  # Mettre à jour la balle et vérifier si elle disparaît
+        for balle in balles:
+            balle.draw(screen)
     if afficher_cible:
         cible.draw(screen)
 
