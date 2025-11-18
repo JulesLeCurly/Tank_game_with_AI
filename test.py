@@ -1,9 +1,8 @@
-#exemple of dict
+import Function.core.Terrain as Terrain
+import time
 
-dict = {
-    "name": "John",
-    "age": 30,
-    "city": "New York"
-}
+t = Terrain.Terrain(1200, 650, 500)
 
-print(dict["name"])
+for i in range(2000):
+    t.generate_terrain()
+    time.sleep(1)
