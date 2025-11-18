@@ -4,7 +4,7 @@ import Function.core.Balle as Balle
 import Function.core.Tank as Tank
 import Function.core.Cible as Cible
 import Function.core.Particule as Particule
-from Function.core.Environnement import Environnement
+from Function.core.Terrain import Environnement
 
 
 pygame.init()  # Initialiser Pygame
@@ -25,6 +25,20 @@ cible = Cible.Cible(width, height)
 tank1 = Tank.Tank(20, 540)  # Position initiale du tank1
 tank2 = Tank.Tank(1080, 540)  # Position initiale du tank2
 afficher_cible=False
+
+color_tank_list = ["red", "blue", "green", "yellow"]
+
+nb_tank = 2
+Tanks_class = {}
+for i in range(nb_tank):
+    x_tank_spawn = (i + 1) * (width / nb_tank + 1)
+    Tanks_class[color_tank_list[i]] = Tank.Tank(
+        width,
+        height,
+        x_tank_spawn,
+        color_tank_list[i]
+    )
+
 
 balles = []      # Liste pour stocker les balles
 particules = []  # Liste pour stocker les particules
@@ -118,8 +132,9 @@ while running:
 
     screen.fill((0, 0, 0))  # Effacer l'écran
     env.draw_ground(screen)
-    tank1.draw(screen, initial_angle1)  # Dessiner le tank1
-    tank2.draw(screen, initial_angle2)  # Dessiner le tank2
+
+    for tank_name in Tanks_class:
+        Tanks_class[tank_name].draw(screen, initial_angle1)
     
     if balles != []:  # Mettre à jour la balle et vérifier si elle disparaît
         for balle in balles:

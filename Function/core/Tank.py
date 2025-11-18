@@ -3,12 +3,19 @@ import math
 
 from PIL import Image
 
+from math import *
+
 class Tank:  # Classe pour représenter le tank
-    def __init__(self, x, y):
+    def __init__(self, width, height, x, color_tank):
         self.x = x
-        self.y = y
+        self.y = 540
         self.vitesse = 2  # Vitesse de déplacement du tank
         self.direction = 0
+
+        dx = (width / 2) - self.x
+        dy = (height / 2) - self.y
+        self.angle = math.atan2(dy, dx)
+
 
         Taille = 4
         Path = 'Images/Tank.png'
