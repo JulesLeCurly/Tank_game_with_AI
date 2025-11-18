@@ -11,6 +11,7 @@ class Tank:  # Classe pour représenter le tank
         self.y = 540
         self.vitesse = 2  # Vitesse de déplacement du tank
         self.direction = 0
+        self.puissance = 10
 
         dx = (width / 2) - self.x
         dy = (height / 2) - self.y

@@ -13,18 +13,6 @@ screen = pygame.display.set_mode((width, height))
 clock = pygame.time.Clock()
 env = Environnement()
 
-# Créer une instance de Balle, Cible et Tank
-initial_vitesse1 = 10
-max_vitesse1 = 35
-initial_angle1 = 45
-initial_vitesse2 = 10
-max_vitesse2 = 35
-initial_angle2 = 125
-balle = None  # Initialiser la balle à None
-cible = Cible.Cible(width, height)
-tank1 = Tank.Tank(20, 540)  # Position initiale du tank1
-tank2 = Tank.Tank(1080, 540)  # Position initiale du tank2
-afficher_cible=False
 
 color_tank_list = ["red", "blue", "green", "yellow"]
 
@@ -39,6 +27,15 @@ for i in range(nb_tank):
         color_tank_list[i]
     )
 
+# Créer une instance de Balle, Cible et Tank
+initial_vitesse1 = 10
+max_puissance = 35
+initial_angle1 = 45
+max_vitesse2 = 35
+balle = None  # Initialiser la balle à None
+cible = Cible.Cible(width, height)
+afficher_cible=False
+
 
 balles = []      # Liste pour stocker les balles
 particules = []  # Liste pour stocker les particules
@@ -52,66 +49,65 @@ while running:
     keys = pygame.key.get_pressed()  # Gérer les entrées
 
     if keys[pygame.K_a]:  # Augmenter l'angle
-        Tanks_class["red"].angle = min(180, Tanks_class["red"].angle + 0.8)
-        initial_angle1 = min(180, initial_angle1 + 0.8)  # Ne pas dépasser 180
+        Tanks_class["red"].angle = min(180, Tanks_class["red"].angle + 0.8) # Ne pas dépasser 180
     if keys[pygame.K_e]:  # Diminuer l'angle
-        initial_angle1 = max(0, initial_angle1 - 0.8)
+        Tanks_class["red"].angle = min(0, Tanks_class["red"].angle  - 0.8)
     if keys[pygame.K_s]:  # Diminuer la vitesse
-        initial_vitesse1 = max(1, initial_vitesse1 - 0.3)  # Ne pas descendre en dessous de 1
+        Tanks_class["red"].puissance = min(1, Tanks_class["red"].puissance - 0.3)  # Ne pas descendre en dessous de 1
     if keys[pygame.K_z]:  # Augmenter la vitesse
-        initial_vitesse1 += 0.3
-        if initial_vitesse1 > max_vitesse1:
-            initial_vitesse1 = max_vitesse1
+        Tanks_class["red"].puissance += 0.3
+        if Tanks_class["red"].puissance > max_puissance:
+            Tanks_class["red"].puissance = max_puissance
     # Déplacement du tank
     if keys[pygame.K_q]:  # Aller à gauche (AZERTY)
-        tank1.x -= tank1.vitesse
+        Tanks_class["red"].x -= Tanks_class["red"].vitesse
     if keys[pygame.K_d]:  # Aller à droite (AZERTY)
-        tank1.x += tank1.vitesse
+        Tanks_class["red"].x += Tanks_class["red"].vitesse
     if keys[pygame.K_f]:  # Tirer la balle avec la touche espace
         if balle is None or not balle.visible:  # Si aucune balle n'est active
-            cannon_end_x, cannon_end_y = tank1.draw(screen, initial_angle1)  # Obtenir la position de l'extrémité du canon
+            cannon_end_x, cannon_end_y = Tanks_class["red"].draw(screen, Tanks_class["red"].angle)  # Obtenir la position de l'extrémité du canon
             balles.append(Balle.Balle(
                 width,
                 height,
                 cannon_end_x,
                 cannon_end_y, 5,
-                initial_angle1,
-                initial_vitesse1,
-                tank1.vitesse * tank1.direction
+                Tanks_class["red"].angle,
+                Tanks_class["red"].vitesse,
+                Tanks_class["red"].vitesse * Tanks_class["red"].direction
             ))  # Créer la balle à la position du canon
 
 
 
     # Modifier l'angle
     if keys[pygame.K_i]:  # Augmenter l'angle
-        initial_angle2 = min(180, initial_angle2 + 0.8)
+        Tanks_class["blue"].angle = min(180, Tanks_class["blue"].angle + 0.8)
     if keys[pygame.K_p]:  # Diminuer l'angle
-        initial_angle2 = max(0, initial_angle2 - 0.8)
+        Tanks_class["blue"].angle = max(0, Tanks_class["blue"].angle - 0.8)
 
     # Modifier la vitesse (puissance)
     if keys[pygame.K_l]:  # Diminuer la puissance
-        initial_vitesse2 = max(1, initial_vitesse2 - 0.3)
+        Tanks_class["blue"].puissance = max(1, Tanks_class["blue"].puissance - 0.3)
     if keys[pygame.K_o]:  # Augmenter la puissance
-        initial_vitesse2 = min(max_vitesse2, initial_vitesse2 + 0.3)
+        Tanks_class["blue"].puissance = min(max_vitesse2, Tanks_class["blue"].puissance + 0.3)
 
     # Déplacement du tank
     if keys[pygame.K_k]:  # Aller à gauche (AZERTY)
-        tank2.x -= tank2.vitesse
+        Tanks_class["blue"].x -= Tanks_class["blue"].vitesse
     if keys[pygame.K_m]:  # Aller à droite (AZERTY)
-        tank2.x += tank2.vitesse
+        Tanks_class["blue"].x += Tanks_class["blue"].vitesse
 
     # Tir
     if keys[pygame.K_j]:  # Tir avec Entrée
-        cannon_end_x, cannon_end_y = tank2.draw(screen, initial_angle2)
+        cannon_end_x, cannon_end_y = Tanks_class["blue"].draw(screen, Tanks_class["blue"].angle)
         balles.append(Balle.Balle(
             width,
             height,
             cannon_end_x,
             cannon_end_y,
             5,
-            initial_angle2,
-            initial_vitesse2,
-            tank2.vitesse * tank2.direction
+            Tanks_class["blue"].angle,
+            Tanks_class["blue"].puissance,
+            Tanks_class["blue"].vitesse * Tanks_class["blue"].direction
         ))
 
 
@@ -152,8 +148,8 @@ while running:
     vitesse_text1 = font.render(f"Vitesse: {round(initial_vitesse1)}", True, (255, 255, 255))
     angle_text1 = font.render(f"Angle: {round(initial_angle1)}°", True, (255, 255, 255))
     score_text1 = font.render(f"Score: {score}", True, (255, 255, 255))                          # Afficher le score
-    vitesse_text2 = font.render(f"Vitesse: {round(initial_vitesse2)}", True, (255, 255, 255))
-    angle_text2 = font.render(f"Angle: {round(initial_angle2)}°", True, (255, 255, 255))
+    vitesse_text2 = font.render(f"Vitesse: {round(Tanks_class['blue'].puissance)}", True, (255, 255, 255))
+    angle_text2 = font.render(f"Angle: {round(Tanks_class['blue'].angle)}°", True, (255, 255, 255))
     score_text2 = font.render(f"Score: {score}", True, (255, 255, 255))                          # Afficher le score
 
     screen.blit(vitesse_text1, (10, 10))  # Afficher la vitesse en haut à gauche
