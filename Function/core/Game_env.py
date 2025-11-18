@@ -20,7 +20,7 @@ nb_tank = 2
 Tanks_class = {}
 for i in range(nb_tank):
     x_tank_spawn = (i + 1) * (width / (nb_tank +1))
-    print(x_tank_spawn)
+    x_tank_spawn-=42.5
     Tanks_class[color_tank_list[i]] = Tank.Tank(
         width,
         height,
@@ -76,7 +76,8 @@ while running:
             5,
             Tanks_class["red"].angle,
             Tanks_class["red"].puissance,
-            Tanks_class["red"].vitesse * Tanks_class["red"].direction
+            Tanks_class["red"].vitesse * Tanks_class["red"].direction,
+            owner=Tanks_class["red"]
         ))
 
 
@@ -111,7 +112,8 @@ while running:
             5,
             Tanks_class["blue"].angle,
             Tanks_class["blue"].puissance,
-            Tanks_class["blue"].vitesse * Tanks_class["blue"].direction
+            Tanks_class["blue"].vitesse * Tanks_class["blue"].direction,
+            owner=Tanks_class["blue"]
         ))
 
 
@@ -123,6 +125,11 @@ while running:
                     particules.append(Particule.Particule(position_disparition[0], position_disparition[1]))
 
 
+    for tank_name in Tanks_class:
+        if Tanks_class[tank_name].x < 0:
+            Tanks_class[tank_name].x =0
+        if Tanks_class[tank_name].x > width-85:
+            Tanks_class[tank_name].x = width-85
 
     if balle is not None and balle.visible and afficher_cible:  # Vérifier la collision avec la cible
         balle_rect = pygame.Rect(balle.x - balle.rayon, balle.y - balle.rayon, balle.rayon * 2, balle.rayon * 2)
@@ -134,8 +141,16 @@ while running:
     screen.fill((0, 0, 0))  # Effacer l'écran
     env.draw_ground(screen)
 
+    for balle in balles:
+        for tank_name, tank in Tanks_class.items():
+
+            # Empêcher qu’un tank touche son propre tireur
+            if balle.owner == tank:
+                continue
+
+
     for tank_name in Tanks_class:
-        Tanks_class[tank_name].draw(screen, initial_angle1)
+        Tanks_class[tank_name].draw(screen, Tanks_class[tank_name].angle)
     
     if balles != []:  # Mettre à jour la balle et vérifier si elle disparaît
         for balle in balles:
@@ -143,14 +158,20 @@ while running:
     if afficher_cible:
         cible.draw(screen)
 
+    for balle in balles:
+        for name, tank in Tanks_class.items():
+            if tank.hit(balle):
+                print(name, "touché !")
+                balle.visible = False
+
     for particule in particules:  # Mettre à jour et dessiner les particules
         particule.update()
         particule.draw(screen)
 
     particules = [p for p in particules if p.lifetime > 0]  # Supprimer les particules qui ont expiré
     font = pygame.font.Font(None, 36)  # Afficher les paramètres actuels
-    vitesse_text1 = font.render(f"Vitesse: {round(initial_vitesse1)}", True, (255, 255, 255))
-    angle_text1 = font.render(f"Angle: {round(initial_angle1)}°", True, (255, 255, 255))
+    vitesse_text1 = font.render(f"Vitesse: {round(Tanks_class['red'].puissance)}", True, (255, 255, 255))
+    angle_text1 = font.render(f"Angle: {round(Tanks_class['red'].angle)}°", True, (255, 255, 255))
     score_text1 = font.render(f"Score: {score}", True, (255, 255, 255))                          # Afficher le score
     vitesse_text2 = font.render(f"Vitesse: {round(Tanks_class['blue'].puissance)}", True, (255, 255, 255))
     angle_text2 = font.render(f"Angle: {round(Tanks_class['blue'].angle)}°", True, (255, 255, 255))

@@ -21,4 +21,4 @@ class Particule:  # Classe pour représenter une particule
 
     def draw(self, screen):
         if self.lifetime > 0:
-            pygame.draw.circle(screen, (150, 255, 0), (int(self.x), int(self.y)), int(self.rayon))
+            pygame.draw.circle(screen, (0, 100, 0), (int(self.x), int(self.y)), int(self.rayon))
