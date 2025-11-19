@@ -3,7 +3,7 @@ import random
 import math
 
 class Balle:   # Classe pour représenter la balle
-    def __init__(self, screen_width, screen_height, x, y, rayon, angle, vitesse, vitesse_tank):
+    def __init__(self, screen_width, screen_height, x, y, rayon, angle, vitesse, vitesse_tank, owner):
         self.screen_width = screen_width
         self.screen_height = screen_height
         self.rayon = rayon
@@ -14,6 +14,9 @@ class Balle:   # Classe pour représenter la balle
         self.Vitesse_x = vitesse * math.cos(self.angle_rad) + vitesse_tank
         self.Vitesse_y = -vitesse * math.sin(self.angle_rad)  # Négatif car l'axe Y est inversé
         self.visible = True
+        self.rayon = rayon
+        self.owner = owner   # tank qui tire
+
 
     def update(self):
         if self.visible:
@@ -27,4 +30,4 @@ class Balle:   # Classe pour représenter la balle
 
     def draw(self, screen):
         if self.visible:
-            pygame.draw.circle(screen, (120, 200, 0), (int(self.x), int(self.y)), self.rayon)
+            pygame.draw.circle(screen, (0, 100, 0), (int(self.x), int(self.y)), self.rayon)

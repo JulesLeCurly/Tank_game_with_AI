@@ -1,41 +1,66 @@
 import pygame
 import math
-
 from PIL import Image
 
-from math import *
 
-class Tank:  # Classe pour représenter le tank
+class Tank:
     def __init__(self, width, height, x, color_tank):
         self.x = x
         self.y = 540
-        self.vitesse = 2  # Vitesse de déplacement du tank
+        self.vitesse = 2
         self.direction = 0
+        self.puissance = 10
+        self.color = color_tank
 
-        dx = (width / 2) - self.x
-        dy = (height / 2) - self.y
-        self.angle = math.atan2(dy, dx)
+        # chemin de l'image
+        self.path = f"Images/Tank.png"  # ex: Tank_red.png
 
+        # --- PIL image pour hitbox pixel-perfect ---
+        self.image_pil = Image.open(self.path).convert("RGBA")
+        self.pixels = self.image_pil.load()
+        self.width, self.height = self.image_pil.size
 
+        # --- Pygame image pour affichage ---
         Taille = 4
-        Path = 'Images/Tank.png'
-        # Ouvrir l'image
-        Background_image = Image.open(Path)
-
-        # Récupérer largeur et hauteur
-        width, height = Background_image.size
-
-        self.Tank = pygame.transform.scale(
-            pygame.image.load(Path),
-            (width * Taille, height * Taille)
+        self.image_pg = pygame.transform.scale(
+            pygame.image.load(self.path),
+            (self.width * Taille, self.height * Taille)
         )
 
+        # Nouveaux width/height après le scale pygame
+        self.draw_width = self.width * Taille
+        self.draw_height = self.height * Taille
 
-    def draw(self, screen, angle):  # Dessiner le char
-        screen.blit(self.Tank, (self.x, self.y))
-        cannon_longueur = 40  # Longueur du canon
-        cannon_start = (self.x + 9 * 4.5, self.y - 0)  # Point de départ du canon
-        cannon_end_x = cannon_start[0] + cannon_longueur * math.cos(math.radians(angle))
-        cannon_end_y = cannon_start[1] - cannon_longueur * math.sin(math.radians(angle))
-        pygame.draw.line(screen, (0, 100, 0), cannon_start, (cannon_end_x, cannon_end_y), 5)  # Dessiner le canon
-        return cannon_end_x, cannon_end_y  # Retourner la position de l'extrémité du canon
+        # Angle de base (vise le centre de l'écran)
+        dx = (width / 2) - (self.x + self.draw_width / 2)
+        dy = (height * 0.75) - self.y
+        self.angle = math.degrees(math.atan2(-dy, dx))  # CORRIGÉ
+
+
+    # --- Hitbox Pixel-Perfect PIL ---
+    def hit(self, balle):
+        # coordonnées dans l'image originale (pas l'image scale pygame)
+        bx = int((balle.x - self.x) / 4)
+        by = int((balle.y - self.y) / 4)
+
+        if 0 <= bx < self.width and 0 <= by < self.height:
+            r, g, b, a = self.pixels[bx, by]
+            return a > 10     # 10 = marge anti-bruit
+
+        return False
+
+
+    # --- Affichage du tank ---
+    def draw(self, screen, angle):
+        screen.blit(self.image_pg, (self.x, self.y))
+
+        # Position canon
+        cannon_length = 40
+        cannon_start = (self.x + self.draw_width / 2 - 2.5, self.y + 10)
+
+        cannon_end_x = cannon_start[0] + cannon_length * math.cos(math.radians(angle))
+        cannon_end_y = cannon_start[1] - cannon_length * math.sin(math.radians(angle))
+
+        pygame.draw.line(screen, (0, 100, 0), cannon_start, (cannon_end_x, cannon_end_y), 5)
+
+        return cannon_end_x, cannon_end_y
