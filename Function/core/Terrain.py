@@ -6,7 +6,7 @@ from PIL import Image
 import os
 
 class Terrain:
-    def __init__(self, width, height, sol_y=600, sol_width=1200, sol_height=80, sol_color=(139, 69, 19)):
+    def __init__(self, width, height, sol_y=500, sol_width=1200, sol_height=80, sol_color=(139, 69, 19)):
         self.sol_y = sol_y
         self.sol_width = sol_width
         self.sol_height = sol_height
@@ -15,8 +15,12 @@ class Terrain:
         self.width = width
         self.height = height
 
+        self.path = f"Images/Terrains/Terrain.png"
+
+        self.image_Terrains = pygame.image.load(self.path)
+
     def draw_ground(self, screen):
-        pygame.draw.rect(screen, self.sol_color, (0, self.sol_y, self.sol_width, self.sol_height))
+        screen.blit(self.image_Terrains, (0, 0))
     
     def generer_terrain_brute(self, nb_points=1200, amplitude=20.0, pente_max=2.0, frequence=0.01):
         x = list(range(nb_points))

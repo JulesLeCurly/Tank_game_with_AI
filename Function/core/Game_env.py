@@ -4,15 +4,16 @@ import Function.core.Balle as Balle
 import Function.core.Tank as Tank
 import Function.core.Cible as Cible
 import Function.core.Particule as Particule
-from Function.core.Terrain import Environnement
+from Function.core.Terrain import Terrain
 
 
 pygame.init()  # Initialiser Pygame
 width, height = 1200, 650
 screen = pygame.display.set_mode((width, height))
 clock = pygame.time.Clock()
-env = Environnement()
+Terrain_class = Terrain(width, height)
 
+Terrain_class.generate_terrain()
 
 color_tank_list = ["red", "blue", "green", "yellow"]
 
@@ -139,7 +140,7 @@ while running:
             cible.reset_position()  # Réinitialiser la position de la cible
 
     screen.fill((0, 0, 0))  # Effacer l'écran
-    env.draw_ground(screen)
+    Terrain_class.draw_ground(screen)
 
     for balle in balles:
         for tank_name, tank in Tanks_class.items():
