@@ -67,7 +67,7 @@ while running:
         Tanks_class["red"].x += Tanks_class["red"].vitesse
 
     # Tir
-    if keys[pygame.K_f]:  # Tir avec Entrée
+    if keys[pygame.K_f] and Tanks_class["red"].can_shoot:  # Tir avec Entrée
         cannon_end_x, cannon_end_y = Tanks_class["red"].draw(screen, Tanks_class["red"].angle)
         balles.append(Balle.Balle(
             width,
@@ -80,6 +80,7 @@ while running:
             Tanks_class["red"].vitesse * Tanks_class["red"].direction,
             owner=Tanks_class["red"]
         ))
+        Tanks_class["red"].can_shoot = False
 
 
 
@@ -103,7 +104,7 @@ while running:
         Tanks_class["blue"].x += Tanks_class["blue"].vitesse
 
     # Tir
-    if keys[pygame.K_j]:  # Tir avec Entrée
+    if keys[pygame.K_j] and Tanks_class["blue"].can_shoot:  # Tir avec Entrée
         cannon_end_x, cannon_end_y = Tanks_class["blue"].draw(screen, Tanks_class["blue"].angle)
         balles.append(Balle.Balle(
             width,
@@ -116,12 +117,14 @@ while running:
             Tanks_class["blue"].vitesse * Tanks_class["blue"].direction,
             owner=Tanks_class["blue"]
         ))
+        Tanks_class["blue"].can_shoot = False
 
 
     if balles != []:  # Mettre à jour la balle et vérifier si elle disparaît
         for balle in balles:
             position_disparition = balle.update()
             if position_disparition:
+                balle.owner.can_shoot = True
                 for _ in range(100):  # Créer des particules à la position de la balle
                     particules.append(Particule.Particule(position_disparition[0], position_disparition[1]))
 
@@ -161,8 +164,12 @@ while running:
 
     for balle in balles:
         for name, tank in Tanks_class.items():
+            if balle.owner == tank:
+                continue
             if tank.hit(balle):
                 print(name, "touché !")
+                tank.hp -= 1
+                balle.owner.can_shoot = True     # <-- libère le tir !
                 balle.visible = False
 
     for particule in particules:  # Mettre à jour et dessiner les particules

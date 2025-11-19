@@ -11,6 +11,10 @@ class Tank:
         self.direction = 0
         self.puissance = 10
         self.color = color_tank
+        self.touche = False
+        self.hp = 3
+        self.can_shoot = True
+
 
         # chemin de l'image
         self.path = f"Images/Tank.png"  # ex: Tank_red.png
@@ -39,14 +43,13 @@ class Tank:
 
     # --- Hitbox Pixel-Perfect PIL ---
     def hit(self, balle):
-        # coordonnées dans l'image originale (pas l'image scale pygame)
         bx = int((balle.x - self.x) / 4)
         by = int((balle.y - self.y) / 4)
 
         if 0 <= bx < self.width and 0 <= by < self.height:
-            r, g, b, a = self.pixels[bx, by]
-            return a > 10     # 10 = marge anti-bruit
-
+                r, g, b, a = self.pixels[bx, by]
+                if a > 10:
+                    return True   # une seule détection par balle
         return False
 
 
