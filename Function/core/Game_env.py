@@ -56,7 +56,7 @@ while running:
 
     # Modifier la vitesse (puissance)
     if keys[pygame.K_s]:  # Diminuer la puissance
-        Tanks_class["red"].puissance = max(1, Tanks_class["red"].puissance - 0.3)
+        Tanks_class["red"].puissance = max(5, Tanks_class["red"].puissance - 0.3)
     if keys[pygame.K_z]:  # Augmenter la puissance
         Tanks_class["red"].puissance = min(max_vitesse2, Tanks_class["red"].puissance + 0.3)
 
@@ -92,7 +92,7 @@ while running:
 
     # Modifier la vitesse (puissance)
     if keys[pygame.K_l]:  # Diminuer la puissance
-        Tanks_class["blue"].puissance = max(1, Tanks_class["blue"].puissance - 0.3)
+        Tanks_class["blue"].puissance = max(5, Tanks_class["blue"].puissance - 0.3)
     if keys[pygame.K_o]:  # Augmenter la puissance
         Tanks_class["blue"].puissance = min(max_vitesse2, Tanks_class["blue"].puissance + 0.3)
 
