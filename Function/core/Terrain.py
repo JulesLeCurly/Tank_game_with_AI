@@ -17,7 +17,6 @@ class Terrain:
 
         self.path = f"Images/Terrains/Terrain.png"
 
-        self.image_Terrains = pygame.image.load(self.path)
 
     def draw_ground(self, screen):
         screen.blit(self.image_Terrains, (0, 0))
@@ -89,3 +88,6 @@ class Terrain:
 
         os.makedirs("Images/Terrains", exist_ok=True)
         Terrain_image.save("Images/Terrains/Terrain.png")
+
+        
+        self.image_Terrains = pygame.image.load(self.path)
