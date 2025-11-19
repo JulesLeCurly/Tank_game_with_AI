@@ -1,2 +1,6 @@
 # Ignorer les dossiers __pycache__ partout
 __pycache__/
+
+
+# Keep the folder, ignore PNGs in it
+Images/Terrains/*.png
