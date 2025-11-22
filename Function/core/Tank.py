@@ -1,7 +1,7 @@
 import pygame
 import math
 from PIL import Image
-
+import numpy as np
 
 class Tank:
     def __init__(self, width, height, x, color_tank):
@@ -54,15 +54,15 @@ class Tank:
 
 
     # --- Affichage du tank ---
-    def draw(self, screen, angle):
-        screen.blit(self.image_pg, (self.x, self.y))
+    def draw(self, screen, array_terrain):
+        screen.blit(self.image_pg, (self.x, array_terrain[int(self.x)]))
 
         # Position canon
         cannon_length = 40
         cannon_start = (self.x + self.draw_width / 2 - 2.5, self.y + 10)
 
-        cannon_end_x = cannon_start[0] + cannon_length * math.cos(math.radians(angle))
-        cannon_end_y = cannon_start[1] - cannon_length * math.sin(math.radians(angle))
+        cannon_end_x = cannon_start[0] + cannon_length * math.cos(math.radians(self.angle))
+        cannon_end_y = cannon_start[1] - cannon_length * math.sin(math.radians(self.angle))
 
         pygame.draw.line(screen, (0, 100, 0), cannon_start, (cannon_end_x, cannon_end_y), 5)
 
