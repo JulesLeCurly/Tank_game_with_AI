@@ -1,4 +1,5 @@
 import pygame
+from colorama import Fore, Style, init
 
 import Function.core.Balle as Balle
 import Function.core.Tank as Tank
@@ -41,6 +42,7 @@ balles = []      # Liste pour stocker les balles
 particules = []  # Liste pour stocker les particules
 score = 0
 running = True
+
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -156,25 +158,40 @@ while running:
     for tank_name in Tanks_class:
         Tanks_class[tank_name].draw(screen, Terrain_class.array_terrain)
     
-        if Tanks_class [tank_name].hp <= 0:
-            print(name,"loose")
     if balles != []:  # Mettre à jour la balle et vérifier si elle disparaît
         for balle in balles:
-            balle.draw(screen)
-    if afficher_cible:
-        cible.draw(screen)
+            balle.draw(screen) # list() pour éviter les problèmes si on supprime une balle
+        if not balle.visible:
+            balles.remove(balle)
+            continue
 
-    for balle in balles:
         for name, tank in Tanks_class.items():
-            if balle.owner == tank:
+
+            # empêcher le tir ami
+            if tank == balle.owner:
                 continue
+
+            # collision
             if tank.hit(balle):
-                print(name, "touché !")
+
+                # afficher bonne couleur + bon nom
+                print(getattr(Fore, name.upper()) + f"{name} touché !" + Style.RESET_ALL)
+
+                # enlever de la vie
                 tank.hp -= 1
-                balle.owner.can_shoot = True     # <-- libère le tir !
+
+                # afficher défaite
+                if tank.hp <= 0:
+                    print(getattr(Fore, name.upper()) + f"{name} LOSE !" + Style.RESET_ALL)
+
+                # empêcher spam
+                balle.owner.can_shoot = True
+
+                # supprimer la balle
                 balle.visible = False
-                balles.remove(balle)   # ← SUPPRIMER LA BALLE ICI
-                break
+                balles.remove(balle)
+                break   # stop vérification
+
 
 
     for particule in particules:  # Mettre à jour et dessiner les particules
