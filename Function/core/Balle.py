@@ -2,7 +2,7 @@ import pygame
 import random
 import math
 
-coco={"red":(100,0,0), "blue":(0,0,100)}
+coco={"red":(255,0,0), "blue":(0,0,255)}
 
 class Balle:   # Classe pour représenter la balle
     def __init__(self, screen_width, screen_height, x, y, rayon, angle, vitesse, vitesse_tank, owner, color_tank):
