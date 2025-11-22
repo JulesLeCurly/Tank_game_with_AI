@@ -2,7 +2,7 @@ import pygame
 import math
 from PIL import Image
 import numpy as np
-cocotank={"red":(255,0,0), "blue":(0,0,255)}
+cocotank={"red":(100,0,0), "blue":(0,0,100)}
 class Tank:
     def __init__(self, width, height, x, color_tank):
         self.x = x
