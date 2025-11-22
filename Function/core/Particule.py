@@ -1,6 +1,6 @@
 import pygame
 import random
-coco={"red":(255,0,0), "blue":(0,0,255)}
+coco={"red":(140,0,0), "blue":(0,0,140)}
 
 class Particule:  # Classe pour représenter une particule
     def __init__(self, x, y, color):
