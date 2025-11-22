@@ -81,9 +81,8 @@ class Terrain:
             if y_affiche.min() >= 0 and y_affiche.max() < self.height:
                 break
 
-        
-        self.array_terrain = np.array(y_brut)  # sans décalage
-        terrain_pixels = self.array_terrain + self.sol_y
+        self.array_terrain = np.array(y_brut) + self.sol_y  # sans décalage
+        terrain_pixels = self.array_terrain
         Terrain_image = self.generate_image(terrain_pixels, width=self.width, height=self.height)
 
         os.makedirs("Images/Terrains", exist_ok=True)

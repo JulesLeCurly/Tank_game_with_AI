@@ -55,7 +55,10 @@ class Tank:
 
     # --- Affichage du tank ---
     def draw(self, screen, array_terrain):
-        screen.blit(self.image_pg, (self.x, array_terrain[int(self.x)]))
+        x = int(self.x)
+        y = int(array_terrain[x]) - self.draw_height
+        print(x, y)
+        screen.blit(self.image_pg, (x, y))
 
         # Position canon
         cannon_length = 40

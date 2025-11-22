@@ -154,7 +154,7 @@ while running:
 
 
     for tank_name in Tanks_class:
-        Tanks_class[tank_name].draw(screen, Tanks_class[tank_name].angle)
+        Tanks_class[tank_name].draw(screen, Terrain_class.array_terrain)
     
     if balles != []:  # Mettre à jour la balle et vérifier si elle disparaît
         for balle in balles:
