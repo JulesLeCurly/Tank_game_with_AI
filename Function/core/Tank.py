@@ -71,7 +71,6 @@ class Tank:
 
         image_pg_temp = pygame.transform.rotate(self.image_pg, self.z_rotation)
         self.draw_width, self.draw_height = image_pg_temp.get_size()
-        print(self.z_rotation)
         if self.z_rotation > 0:
             caca = (self.z_rotation / 90) * 25
             screen.blit(image_pg_temp, (self.x, (self.y - self.draw_height - caca)))
