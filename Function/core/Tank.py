@@ -37,6 +37,9 @@ class Tank:
         self.draw_width = self.width * Taille
         self.draw_height = self.height * Taille
 
+        self.Base_draw_width = self.draw_width
+        self.Base_draw_height = self.draw_height
+
         # Angle de base (vise le centre de l'écran)
         dx = (width / 2) - (self.x + self.draw_width / 2)
         dy = (height * 0.75) - self.y
@@ -62,13 +65,19 @@ class Tank:
 
         # Angle de base (vise le centre de l'écran)
         dx = self.draw_width
-        x_index_by_y = self.x + self.draw_width * math.cos(math.radians(self.z_rotation))
+        x_index_by_y = self.x + self.draw_width
         dy = int(array_terrain[int(x_index_by_y)]) - self.y
         self.z_rotation = math.degrees(math.atan2(-dy, dx))
 
         image_pg_temp = pygame.transform.rotate(self.image_pg, self.z_rotation)
         self.draw_width, self.draw_height = image_pg_temp.get_size()
-        screen.blit(image_pg_temp, (self.x, (self.y - self.draw_height)))
+        print(self.z_rotation)
+        if self.z_rotation > 0:
+            caca = (self.z_rotation / 90) * 25
+            screen.blit(image_pg_temp, (self.x, (self.y - self.draw_height - caca)))
+        else:
+            caca = (self.z_rotation / 90) * 25
+            screen.blit(image_pg_temp, (self.x, (self.y - self.Base_draw_height - caca)))
 
         # Position canon
         cannon_length = 40
