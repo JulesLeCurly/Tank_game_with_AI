@@ -7,6 +7,8 @@ class Tank:
     def __init__(self, width, height, x, color_tank):
         self.x = x
         self.y = 540
+        self.z_rotation = 0
+
         self.vitesse = 2
         self.direction = 0
         self.puissance = 10
@@ -55,10 +57,16 @@ class Tank:
 
     # --- Affichage du tank ---
     def draw(self, screen, array_terrain):
-        x = int(self.x)
-        y = int(array_terrain[x]) - self.draw_height
-        print(x, y)
-        screen.blit(self.image_pg, (x, y))
+        self.x = int(self.x)
+        self.y = int(array_terrain[self.x]) - self.draw_height
+
+        # Angle de base (vise le centre de l'écran)
+        dx = self.draw_width
+        dy = self.y - int(array_terrain[self.x + self.draw_width])
+        print(dx, dy)
+        self.z_rotation = math.degrees(math.atan2(dy, dx))
+
+        screen.blit(pygame.transform.rotate(self.image_pg, self.z_rotation), (self.x, self.y))
 
         # Position canon
         cannon_length = 40
