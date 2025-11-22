@@ -171,6 +171,8 @@ while running:
                 tank.hp -= 1
                 balle.owner.can_shoot = True     # <-- libère le tir !
                 balle.visible = False
+                balles.remove(balle)   # ← SUPPRIMER LA BALLE ICI
+                break
 
     for particule in particules:  # Mettre à jour et dessiner les particules
         particule.update()
