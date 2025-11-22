@@ -156,6 +156,8 @@ while running:
     for tank_name in Tanks_class:
         Tanks_class[tank_name].draw(screen, Terrain_class.array_terrain)
     
+        if Tanks_class [tank_name].hp <= 0:
+            print(name,"loose")
     if balles != []:  # Mettre à jour la balle et vérifier si elle disparaît
         for balle in balles:
             balle.draw(screen)
@@ -173,6 +175,7 @@ while running:
                 balle.visible = False
                 balles.remove(balle)   # ← SUPPRIMER LA BALLE ICI
                 break
+
 
     for particule in particules:  # Mettre à jour et dessiner les particules
         particule.update()
