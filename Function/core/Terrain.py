@@ -56,13 +56,16 @@ class Terrain:
         # Image RGBA (transparent par défaut)
         img = np.zeros((height, width, 4), dtype=np.uint8)
 
-        # Couleur brune
-        brown = np.array([110, 200, 20, 255], dtype=np.uint8)
+        # Couleur
+        green = np.array([110, 200, 20, 255], dtype=np.uint8)
+        brown = np.array([139, 69, 19, 255], dtype=np.uint8)
+
 
         # Remplissage : pour chaque x, remplir du bas jusqu'à y
         for x in range(width):
             y = y_brut[x]
-            img[y:height, x] = brown   # Du tracé vers le bas → brun
+            img[y:y+10, x] = green   # Du tracé vers le bas → brun
+            img[y+10:height, x] = brown  # Le reste → vert
             # Le reste reste transparent
 
         return Image.fromarray(img, mode="RGBA")
