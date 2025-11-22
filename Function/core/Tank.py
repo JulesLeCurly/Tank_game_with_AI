@@ -2,7 +2,7 @@ import pygame
 import math
 from PIL import Image
 import numpy as np
-
+cocotank={"red":(100,0,0), "blue":(0,0,100)}
 class Tank:
     def __init__(self, width, height, x, color_tank):
         self.x = x
@@ -19,7 +19,7 @@ class Tank:
 
 
         # chemin de l'image
-        self.path = f"Images/Tank.png"  # ex: Tank_red.png
+        self.path = f"Images/Tank_{color_tank}.png"  # ex: Tank_red.png
 
         # --- PIL image pour hitbox pixel-perfect ---
         self.image_pil = Image.open(self.path).convert("RGBA")
@@ -85,6 +85,6 @@ class Tank:
         cannon_end_x = cannon_start[0] + cannon_length * math.cos(math.radians(self.angle))
         cannon_end_y = cannon_start[1] - cannon_length * math.sin(math.radians(self.angle))
 
-        pygame.draw.line(screen, (0, 100, 0), cannon_start, (cannon_end_x, cannon_end_y), 5)
+        pygame.draw.line(screen, cocotank[self.color], cannon_start, (cannon_end_x, cannon_end_y), 5)
 
         return cannon_end_x, cannon_end_y

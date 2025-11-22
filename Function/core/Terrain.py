@@ -57,7 +57,7 @@ class Terrain:
         img = np.zeros((height, width, 4), dtype=np.uint8)
 
         # Couleur brune
-        brown = np.array([120, 72, 0, 255], dtype=np.uint8)
+        brown = np.array([110, 200, 20, 255], dtype=np.uint8)
 
         # Remplissage : pour chaque x, remplir du bas jusqu'à y
         for x in range(width):

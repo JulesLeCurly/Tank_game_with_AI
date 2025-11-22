@@ -2,8 +2,10 @@ import pygame
 import random
 import math
 
+coco={"red":(100,0,0), "blue":(0,0,100)}
+
 class Balle:   # Classe pour représenter la balle
-    def __init__(self, screen_width, screen_height, x, y, rayon, angle, vitesse, vitesse_tank, owner):
+    def __init__(self, screen_width, screen_height, x, y, rayon, angle, vitesse, vitesse_tank, owner, color_tank):
         self.screen_width = screen_width
         self.screen_height = screen_height
         self.rayon = rayon
@@ -16,6 +18,7 @@ class Balle:   # Classe pour représenter la balle
         self.visible = True
         self.rayon = rayon
         self.owner = owner   # tank qui tire
+        self.color = color_tank
 
 
     def update(self):
@@ -30,4 +33,4 @@ class Balle:   # Classe pour représenter la balle
 
     def draw(self, screen):
         if self.visible:
-            pygame.draw.circle(screen, (0, 100, 0), (int(self.x), int(self.y)), self.rayon)
+            pygame.draw.circle(screen, coco[self.color], (int(self.x), int(self.y)), self.rayon)

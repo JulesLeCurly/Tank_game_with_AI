@@ -82,8 +82,8 @@ while running:
             width, height, cannon_end_x, cannon_end_y,
             5, Tanks_class["red"].angle, Tanks_class["red"].puissance,
             Tanks_class["red"].vitesse * Tanks_class["red"].direction,
-            owner=Tanks_class["red"]
-        ))
+            owner=Tanks_class["red"], color_tank ="red"
+            ))
         Tanks_class["red"].can_shoot = False
 
     # ------------------ CONTROLES TANK BLEU ------------------
@@ -108,7 +108,7 @@ while running:
             width, height, cannon_end_x, cannon_end_y,
             5, Tanks_class["blue"].angle, Tanks_class["blue"].puissance,
             Tanks_class["blue"].vitesse * Tanks_class["blue"].direction,
-            owner=Tanks_class["blue"]
+            owner=Tanks_class["blue"], color_tank = "blue"
         ))
         Tanks_class["blue"].can_shoot = False
 
@@ -122,7 +122,7 @@ while running:
             # particules explosion
             for _ in range(100):
                 particules.append(
-                    Particule.Particule(position_disparition[0], position_disparition[1])
+                    Particule.Particule(position_disparition[0], position_disparition[1], balle.color)
                 )
 
     # --------------------- LIMITE DU TERRAIN ---------------------
@@ -133,7 +133,7 @@ while running:
             Tanks_class[tank_name].x = width - 85
 
     # --------------------- DESSIN ÉCRAN ---------------------
-    screen.fill((0, 0, 0))
+    screen.fill((0,110,220))
     Terrain_class.draw_ground(screen)
 
     # --------------------- DESSIN TANKS ---------------------

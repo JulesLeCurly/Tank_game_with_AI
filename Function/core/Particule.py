@@ -1,9 +1,9 @@
 import pygame
 import random
-
+coco={"red":(100,0,0), "blue":(0,0,100)}
 
 class Particule:  # Classe pour représenter une particule
-    def __init__(self, x, y):
+    def __init__(self, x, y, color):
         self.x = x
         self.y = y
         self.vx = random.uniform(-2, 2)
@@ -11,6 +11,7 @@ class Particule:  # Classe pour représenter une particule
         self.lifetime = random.uniform(0, 150)  # Durée de vie de la particule
         self.gravité = 0.1  # Gravité initiale
         self.rayon = random.uniform(0, 4)
+        self.color = color
 
     def update(self):
         self.x += self.vx
@@ -21,4 +22,4 @@ class Particule:  # Classe pour représenter une particule
 
     def draw(self, screen):
         if self.lifetime > 0:
-            pygame.draw.circle(screen, (0, 100, 0), (int(self.x), int(self.y)), int(self.rayon))
+            pygame.draw.circle(screen, coco[self.color], (int(self.x), int(self.y)), int(self.rayon))
