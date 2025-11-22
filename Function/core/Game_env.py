@@ -105,7 +105,7 @@ while running:
 
     # Tir
     if keys[pygame.K_j] and Tanks_class["blue"].can_shoot:  # Tir avec Entrée
-        cannon_end_x, cannon_end_y = Tanks_class["blue"].draw(screen, Tanks_class["blue"].angle)
+        cannon_end_x, cannon_end_y = Tanks_class["blue"].draw(screen, Terrain_class.array_terrain)
         balles.append(Balle.Balle(
             width,
             height,
