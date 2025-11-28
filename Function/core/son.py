@@ -12,7 +12,7 @@ class Son:
         # Réglage volume (0.0 → 1.0)
         self.shoot.set_volume(0.5)
         self.hit.set_volume(0.4)
-        self.turret.set_volume(0.3)
+        self.turret.set_volume(0.2)
 
     def play_shoot(self):
         self.shoot.play()
