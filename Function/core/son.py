@@ -5,7 +5,7 @@ pygame.mixer.init()
 class Son:
     def __init__(self):
         # Charge les sons
-        self.shoot = pygame.mixer.Sound("Sounds/shoot.wav")
+        self.shoot = pygame.mixer.Sound("Sounds/shoot.mp3")
         self.hit = pygame.mixer.Sound("Sounds/hit.mp3")
         self.turret = pygame.mixer.Sound("Sounds/turret-rotate.mp3")
 
