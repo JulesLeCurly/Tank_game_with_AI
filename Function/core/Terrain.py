@@ -122,8 +122,6 @@ class Terrain:
         new_min = self.height * (self.terrain_interval[0] / 100)
         new_max = self.height * (self.terrain_interval[1] / 100)
 
-        print(new_min, new_max)
-
         # Min et max actuels
         xmin = self.array_terrain.min()
         xmax = self.array_terrain.max()
@@ -147,3 +145,21 @@ class Terrain:
 
         # Chargement pygame
         self.image_Terrains = pygame.image.load(self.path)
+    
+    def change_terrain_at(self, x_center, y_center, radius=8):
+        x_center = int(x_center)
+        y_center = int(y_center)
+
+        for x in range(x_center - radius, x_center + radius + 1):
+            self.array_terrain[x] = max(self.array_terrain[x], y_center + math.sqrt(radius**2 - (x - x_center)**2))
+
+        # Re-generate terrain image after modification
+        terrain_img = self.generate_image(
+            self.array_terrain,
+            width=self.width,
+            height=self.height
+        )
+        terrain_img.save(self.path)
+        self.image_Terrains = pygame.image.load(self.path)
+
+        print(f"Terrain modified at ({x_center}, {y_center}) with radius {radius}")
