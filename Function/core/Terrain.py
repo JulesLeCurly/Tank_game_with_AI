@@ -7,17 +7,16 @@ import os
 
 
 class Terrain:
-    def __init__(self, width, height, sol_y=500, sol_width=1200, sol_height=80, sol_color=(139, 69, 19)):
+    def __init__(self, width, height, terrain_interval=[15, 60], sol_color=(139, 69, 19)):
 
         # Données du sol
-        self.sol_y = sol_y
-        self.sol_width = sol_width
-        self.sol_height = sol_height
         self.sol_color = sol_color
 
         # Dimensions écran
         self.width = width
         self.height = height
+
+        self.terrain_interval = terrain_interval
 
         # Chemin image terrain
         self.path = "Images/Terrains/Terrain.png"
@@ -104,28 +103,36 @@ class Terrain:
     def generate_terrain(self):
 
         y_brut = np.array([-1])  # pour entrer dans la boucle
-        lissage = 2
 
-        # On génère jusqu'à obtenir un terrain dans l'écran
-        while True:
+        x, y_brut = self.generer_terrain_brute(
+            nb_points=self.width,
+            amplitude=1.5,
+            pente_max=1,
+            frequence=6
+        )
 
-            x, y_brut = self.generer_terrain_brute(
-                nb_points=1200,
-                amplitude=6.0,
-                pente_max=10,
-                frequence=0.1
-            )
-
-            for _ in range(lissage):
-                y_brut = self.lisser_courbe(y_brut, window_size=100)
-
-            y_affiche = np.array(y_brut) + self.sol_y
-
-            if 0 <= y_affiche.min() and y_affiche.max() < self.height:
-                break
+        nb_lissage = 4
+        for _ in range(nb_lissage):
+            y_brut = self.lisser_courbe(y_brut, window_size=100)
 
         # Stockage
-        self.array_terrain = np.array(y_brut) + self.sol_y
+        self.array_terrain = np.array(y_brut)
+
+        # Nouveau range
+        new_min = self.height * (self.terrain_interval[0] / 100)
+        new_max = self.height * (self.terrain_interval[1] / 100)
+
+        print(new_min, new_max)
+
+        # Min et max actuels
+        xmin = self.array_terrain.min()
+        xmax = self.array_terrain.max()
+
+        # Scaling
+        self.array_terrain = ((self.array_terrain - xmin) / (xmax - xmin)) * (new_max - new_min) + new_min
+
+        # Conversion
+        self.array_terrain = self.height - self.array_terrain
 
         # Création de l'image
         terrain_img = self.generate_image(
