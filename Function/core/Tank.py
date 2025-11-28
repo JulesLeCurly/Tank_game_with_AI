@@ -58,12 +58,31 @@ class Tank:
     # ====================================================
     def hit(self, balle):
 
-        bx = int((balle.x - self.x) / 4)
-        by = int((balle.y - self.y) / 4)
+        # Centre de rotation (même centre que pour pygame.transform.rotate)
+        cx = self.x + self.draw_width  / 2
+        cy = self.y - (self.draw_height / 2)
 
+        # Coordonnées balle relatives au centre
+        dx = balle.x - cx
+        dy = balle.y - cy
+
+        # Rotation inverse
+        angle_rad = math.radians(self.z_rotation)
+        cos_a = math.cos(angle_rad)
+        sin_a = math.sin(angle_rad)
+
+        # rotation inverse : (x', y') = rot(-angle) * (dx, dy)
+        rx =  dx * cos_a + dy * sin_a
+        ry = -dx * sin_a + dy * cos_a
+
+        # Revenir dans le repère de l’image non-rotée
+        bx = int((rx + self.Base_draw_width/2)  / 4)
+        by = int((ry + self.Base_draw_height/2) / 4)
+
+        # Test pixel-perfect
         if 0 <= bx < self.width and 0 <= by < self.height:
             r, g, b, a = self.pixels[bx, by]
-            if a > 10:         # un pixel non transparent = hit
+            if a > 0:  # pixel non transparent
                 return True
 
         return False
