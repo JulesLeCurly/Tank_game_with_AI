@@ -7,7 +7,7 @@ import Function.core.Tank as Tank
 import Function.core.Cible as Cible
 import Function.core.Particule as Particule
 from Function.core.Terrain import Terrain
-from son import Son
+from Function.core.son import Son
 
 
 sons = Son()
@@ -67,8 +67,10 @@ while running:
 
     # ------------------ CONTROLES TANK ROUGE ------------------
     if keys[pygame.K_a]:
+        sons.play_turret()
         Tanks_class["red"].angle = min(180, Tanks_class["red"].angle + 0.8)
     if keys[pygame.K_e]:
+        sons.play_turret()
         Tanks_class["red"].angle = max(0, Tanks_class["red"].angle - 0.8)
 
     if keys[pygame.K_s]:
@@ -96,8 +98,10 @@ while running:
 
     # ------------------ CONTROLES TANK BLEU ------------------
     if keys[pygame.K_i]:
+        sons.play_turret()
         Tanks_class["blue"].angle = min(180, Tanks_class["blue"].angle + 0.8)
     if keys[pygame.K_p]:
+        sons.play_turret()
         Tanks_class["blue"].angle = max(0, Tanks_class["blue"].angle - 0.8)
 
     if keys[pygame.K_l]:
@@ -114,6 +118,7 @@ while running:
         cannon_end_x, cannon_end_y = Tanks_class["blue"].draw(screen, Terrain_class.array_terrain)
         angle = math.radians(Tanks_class["blue"].angle) + math.radians(Tanks_class["blue"].z_rotation)
         angle = math.degrees(angle)
+        sons.play_shoot()
         balles.append(Balle.Balle(
             width, height, cannon_end_x, cannon_end_y,
             5, angle, Tanks_class["blue"].puissance,
@@ -169,6 +174,8 @@ while running:
                 print(getattr(Fore, name.upper()) + f"{name} touché !" + Style.RESET_ALL)
 
                 tank.hp -= 1
+
+                sons.play_hit()
 
                 if tank.hp <= 0:
                     print(getattr(Fore, name.upper()) + f"{name} LOSE !" + Style.RESET_ALL)
