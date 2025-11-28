@@ -3,7 +3,7 @@ import pygame
 pygame.mixer.init()
 
 class Son:
-    def __init__(self):
+    def __init__(self, player_IDs):
         # Charge les sons
         self.shoot = pygame.mixer.Sound("Sounds/shoot.mp3")
         self.hit = pygame.mixer.Sound("Sounds/hit.mp3")
@@ -14,11 +14,15 @@ class Son:
         self.hit.set_volume(0.4)
         self.turret.set_volume(0.2)
 
+        self.turret_playing = {Player_ID: False for Player_ID in player_IDs}
+
     def play_shoot(self):
         self.shoot.play()
 
     def play_hit(self):
         self.hit.play()
 
-    def play_turret(self):
-        self.turret.play()
+    def play_turret(self, Player_ID=None):
+        if not self.turret_playing[Player_ID]:
+            self.turret.play()
+            self.turret_playing[Player_ID] = True

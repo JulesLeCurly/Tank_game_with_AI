@@ -10,9 +10,6 @@ from Function.core.Terrain import Terrain
 from Function.core.son import Son
 
 
-sons = Son()
-
-
 pygame.init()  # Initialiser Pygame
 
 width, height = 1200, 650
@@ -53,6 +50,8 @@ score = 0
 
 running = True
 
+# --- Initialisation son ---
+sons = Son(color_tank_list[:nb_tank])
 
 # ---------------------------------------------------------------------------
 #                               BOUCLE DU JEU
@@ -67,11 +66,13 @@ while running:
 
     # ------------------ CONTROLES TANK ROUGE ------------------
     if keys[pygame.K_a]:
-        sons.play_turret()
+        sons.play_turret("red")
         Tanks_class["red"].angle = min(180, Tanks_class["red"].angle + 0.8)
-    if keys[pygame.K_e]:
-        sons.play_turret()
+    elif keys[pygame.K_e]:
+        sons.play_turret("red")
         Tanks_class["red"].angle = max(0, Tanks_class["red"].angle - 0.8)
+    else:
+        sons.turret_playing["red"] = False
 
     if keys[pygame.K_s]:
         Tanks_class["red"].puissance = max(5, Tanks_class["red"].puissance - 0.3)
@@ -98,11 +99,13 @@ while running:
 
     # ------------------ CONTROLES TANK BLEU ------------------
     if keys[pygame.K_i]:
-        sons.play_turret()
+        sons.play_turret("blue")
         Tanks_class["blue"].angle = min(180, Tanks_class["blue"].angle + 0.8)
-    if keys[pygame.K_p]:
-        sons.play_turret()
+    elif keys[pygame.K_p]:
+        sons.play_turret("blue")
         Tanks_class["blue"].angle = max(0, Tanks_class["blue"].angle - 0.8)
+    else:
+        sons.turret_playing["blue"] = False
 
     if keys[pygame.K_l]:
         Tanks_class["blue"].puissance = max(5, Tanks_class["blue"].puissance - 0.3)
