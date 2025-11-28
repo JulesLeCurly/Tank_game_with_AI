@@ -7,6 +7,10 @@ import Function.core.Tank as Tank
 import Function.core.Cible as Cible
 import Function.core.Particule as Particule
 from Function.core.Terrain import Terrain
+from son import Son
+
+
+sons = Son()
 
 
 pygame.init()  # Initialiser Pygame
@@ -81,6 +85,7 @@ while running:
         cannon_end_x, cannon_end_y = Tanks_class["red"].draw(screen, Terrain_class.array_terrain)
         angle = math.radians(Tanks_class["red"].angle) + math.radians(Tanks_class["red"].z_rotation)
         angle = math.degrees(angle)
+        sons.play_shoot()
         balles.append(Balle.Balle(
             width, height, cannon_end_x, cannon_end_y,
             5, angle, Tanks_class["red"].puissance,
