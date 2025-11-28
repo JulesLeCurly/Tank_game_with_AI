@@ -129,8 +129,8 @@ while running:
     for tank_name in Tanks_class:
         if Tanks_class[tank_name].x < 0:
             Tanks_class[tank_name].x = 0
-        if Tanks_class[tank_name].x > width - 85:
-            Tanks_class[tank_name].x = width - 85
+        if Tanks_class[tank_name].x > width - ( Tanks_class[tank_name].draw_width + 1 ):
+            Tanks_class[tank_name].x = width - ( Tanks_class[tank_name].draw_width +1 )
 
     # --------------------- DESSIN ÉCRAN ---------------------
     screen.fill((0,110,220))
