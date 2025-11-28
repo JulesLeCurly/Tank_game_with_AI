@@ -8,6 +8,8 @@ import Function.core.Cible as Cible
 import Function.core.Particule as Particule
 from Function.core.Terrain import Terrain
 from Function.core.son import Son
+from Function.core.Cloud import Cloud
+
 
 
 pygame.init()  # Initialiser Pygame
@@ -36,6 +38,9 @@ for i in range(nb_tank):
         x_tank_spawn,
         color_tank_list[i]
     )
+
+# Créer des nuages
+clouds = [Cloud(width, height) for _ in range(5)]   # 5 nuages
 
 # --- Instances de base ---
 max_puissance = 35
@@ -150,9 +155,16 @@ while running:
         if Tanks_class[tank_name].x > width - ( Tanks_class[tank_name].draw_width + 1 ):
             Tanks_class[tank_name].x = width - ( Tanks_class[tank_name].draw_width +1 )
 
+    for cloud in clouds:
+        cloud.update()
+
     # --------------------- DESSIN ÉCRAN ---------------------
     screen.fill((0,110,220))
     Terrain_class.draw_ground(screen)
+
+    for cloud in clouds:
+        cloud.draw(screen)
+
 
     # --------------------- DESSIN TANKS ---------------------
     for tank_name in Tanks_class:
