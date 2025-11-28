@@ -9,7 +9,7 @@ import Function.core.Particule as Particule
 from Function.core.Terrain import Terrain
 from Function.core.son import Son
 from Function.core.Cloud import Cloud
-
+from Function.core.Life import Life
 
 
 pygame.init()  # Initialiser Pygame
@@ -32,12 +32,22 @@ Tanks_class = {}
 for i in range(nb_tank):
     x_tank_spawn = (i + 1) * (width / (nb_tank + 1))
     x_tank_spawn -= 42.5
-    Tanks_class[color_tank_list[i]] = Tank.Tank(
+    color = color_tank_list[i]
+
+    Tanks_class[color] = Tank.Tank(
         width,
         height,
         x_tank_spawn,
-        color_tank_list[i]
+        color
     )
+
+# --- Création des barres de vie (Life class) ---
+life_ui = {
+    "red":  Life("red", scale=0.2),   # ← ici tu règles la taille
+    "blue": Life("blue", scale=0.2)
+}
+
+
 
 # Créer des nuages
 clouds = [Cloud(width, height) for _ in range(5)]   # 5 nuages
@@ -200,6 +210,26 @@ while running:
                 balle.visible = False
                 balles.remove(balle)
                 break
+
+    # --------------------- AFFICHAGE DES VIES ---------------------
+    # Tank rouge (haut gauche)
+    life_ui["red"].draw(
+        screen,
+        Tanks_class["red"].hp,
+        Tanks_class["red"].hp_max,
+        x=10,
+        y=600
+    )
+
+    # Tank bleu (haut droite)
+    life_ui["blue"].draw(
+        screen,
+        Tanks_class["blue"].hp,
+        Tanks_class["blue"].hp_max,
+        x=width - (Tanks_class["blue"].hp_max * 50),  # auto-aligné
+        y=600
+    )
+
 
     # --------------------- PARTICULES ---------------------
     for particule in particules:

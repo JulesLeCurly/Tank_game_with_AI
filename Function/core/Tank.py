@@ -25,6 +25,10 @@ class Tank:
         self.touche = False
         self.hp = 3
         self.can_shoot = True
+        
+        self.hp_max = 3     # ou le nombre de vies que tu veux
+        self.hp = self.hp_max
+
 
         # ----- IMAGE SOURCE -----
         self.path = f"Images/Tank_{color_tank}.png"  # ex : Images/Tank_red.png
