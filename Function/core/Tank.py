@@ -92,16 +92,22 @@ class Tank:
         caca = (self.z_rotation / 90) * 25
 
         if self.z_rotation > 0:
-            screen.blit(image_pg_temp, (self.x, (self.y - self.draw_height - caca)))
+            y = (self.y - self.draw_height - caca)
         else:
-            screen.blit(image_pg_temp, (self.x, (self.y - self.Base_draw_height - caca)))
+            y = (self.y - self.Base_draw_height - caca)
+
+        # Dessin
+        screen.blit(image_pg_temp, (self.x, y))
 
         # ----- Calcul du bout du canon -----
         cannon_length = 40
-        cannon_start = (self.x + self.draw_width / 2 - 2.5, self.y + 10)
+        cannon_start = [self.x + self.draw_width / 2, y + self.draw_height / 2]
 
-        cannon_end_x = cannon_start[0] + cannon_length * math.cos(math.radians(self.angle))
-        cannon_end_y = cannon_start[1] - cannon_length * math.sin(math.radians(self.angle))
+        cannon_start[0] += (20 * math.cos(math.radians(self.angle) + math.radians(self.z_rotation))) # rotation attached to tank
+        cannon_start[1] -= (20 * math.sin(math.radians(self.angle) + math.radians(self.z_rotation))) # rotation attached to tank
+
+        cannon_end_x = cannon_start[0] + cannon_length * math.cos(math.radians(self.angle) + math.radians(self.z_rotation))
+        cannon_end_y = cannon_start[1] - cannon_length * math.sin(math.radians(self.angle) + math.radians(self.z_rotation))
 
         # Dessin du canon
         pygame.draw.line(

@@ -1,4 +1,5 @@
 import pygame
+import math
 from colorama import Fore, Style, init
 
 import Function.core.Balle as Balle
@@ -78,9 +79,11 @@ while running:
 
     if keys[pygame.K_f] and Tanks_class["red"].can_shoot:
         cannon_end_x, cannon_end_y = Tanks_class["red"].draw(screen, Terrain_class.array_terrain)
+        angle = math.radians(Tanks_class["red"].angle) + math.radians(Tanks_class["red"].z_rotation)
+        angle = math.degrees(angle)
         balles.append(Balle.Balle(
             width, height, cannon_end_x, cannon_end_y,
-            5, Tanks_class["red"].angle, Tanks_class["red"].puissance,
+            5, angle, Tanks_class["red"].puissance,
             Tanks_class["red"].vitesse * Tanks_class["red"].direction,
             owner=Tanks_class["red"], color_tank ="red"
             ))
@@ -104,9 +107,11 @@ while running:
 
     if keys[pygame.K_j] and Tanks_class["blue"].can_shoot:
         cannon_end_x, cannon_end_y = Tanks_class["blue"].draw(screen, Terrain_class.array_terrain)
+        angle = math.radians(Tanks_class["blue"].angle) + math.radians(Tanks_class["blue"].z_rotation)
+        angle = math.degrees(angle)
         balles.append(Balle.Balle(
             width, height, cannon_end_x, cannon_end_y,
-            5, Tanks_class["blue"].angle, Tanks_class["blue"].puissance,
+            5, angle, Tanks_class["blue"].puissance,
             Tanks_class["blue"].vitesse * Tanks_class["blue"].direction,
             owner=Tanks_class["blue"], color_tank = "blue"
         ))
