@@ -43,7 +43,7 @@ class Balle:
     # ============================================================
     # 🔵 Mise à jour du projectile (gravité + mouvement + disparition)
     # ============================================================
-    def update(self):
+    def update(self, terrain_array):
         if self.visible:
 
             # Déplacement
@@ -63,6 +63,13 @@ class Balle:
                 self.visible = False
                 # Retourne la dernière position valide pour tests de collision
                 return (self.x, self.y)
+            
+            # Suppression si collision avec le terrain
+            if 0 <= int(self.x) < self.screen_width:
+                terrain_y = terrain_array[int(self.x)]
+                if self.y + self.rayon >= terrain_y:
+                    self.visible = False
+                    return (self.x, self.y)
 
         return None
 

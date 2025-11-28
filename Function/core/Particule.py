@@ -37,9 +37,11 @@ class Particule:
     # ================================================================
     # 🔵 Mise à jour (physique + réduction du rayon + durée)
     # ================================================================
-    def update(self):
+    def update(self, terrain_array):
         self.x += self.vx
         self.y += self.vy + self.gravite
+
+        self.y = min(self.y, terrain_array[int(self.x)] if 0 <= int(self.x) < len(terrain_array) else self.y)
 
         # Gravité augmente au fil du temps
         self.gravite += 0.03

@@ -119,7 +119,7 @@ while running:
 
     # --------------------- UPDATE BALLES ---------------------
     for balle in list(balles):
-        position_disparition = balle.update()
+        position_disparition = balle.update(Terrain_class.array_terrain)
 
         if position_disparition:
             balle.owner.can_shoot = True
@@ -176,7 +176,7 @@ while running:
 
     # --------------------- PARTICULES ---------------------
     for particule in particules:
-        particule.update()
+        particule.update(Terrain_class.array_terrain)
         particule.draw(screen)
 
     particules = [p for p in particules if p.lifetime > 0]
