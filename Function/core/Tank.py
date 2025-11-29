@@ -31,7 +31,7 @@ class Tank:
 
 
         # ----- IMAGE SOURCE -----
-        self.path = f"Images/Tank_{color_tank}.png"  # ex : Images/Tank_red.png
+        self.path = f"Function/Images/Tank_{color_tank}.png"  # ex : Images/Tank_red.png
 
         # ----- PIL pour HITBOX PIXEL PERFECT -----
         self.image_pil = Image.open(self.path).convert("RGBA")

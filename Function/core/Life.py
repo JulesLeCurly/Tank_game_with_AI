@@ -10,9 +10,9 @@ class Life:
         self.scale = scale
 
         # ----- Chargement des sprites -----
-        img_red  = pygame.image.load("Images/lifeheart_red.png").convert_alpha()
-        img_blue = pygame.image.load("Images/lifeheart_blue.png").convert_alpha()
-        img_gray = pygame.image.load("Images/lifeheart_gray.png").convert_alpha()
+        img_red  = pygame.image.load("Function/Images/lifeheart_red.png").convert_alpha()
+        img_blue = pygame.image.load("Function/Images/lifeheart_blue.png").convert_alpha()
+        img_gray = pygame.image.load("Function/Images/lifeheart_gray.png").convert_alpha()
 
         # ----- Resize -----
         w = img_red.get_width()  * scale

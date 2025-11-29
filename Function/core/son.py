@@ -5,9 +5,9 @@ pygame.mixer.init()
 class Son:
     def __init__(self, player_IDs):
         # Charge les sons
-        self.shoot = pygame.mixer.Sound("Sounds/shoot.mp3")
-        self.hit = pygame.mixer.Sound("Sounds/hit.mp3")
-        self.turret = pygame.mixer.Sound("Sounds/turret-rotate.mp3")
+        self.shoot = pygame.mixer.Sound("Function/Sounds/shoot.mp3")
+        self.hit = pygame.mixer.Sound("Function/Sounds/hit.mp3")
+        self.turret = pygame.mixer.Sound("Function/Sounds/turret-rotate.mp3")
 
         # Réglage volume (0.0 → 1.0)
         self.shoot.set_volume(0.5)
