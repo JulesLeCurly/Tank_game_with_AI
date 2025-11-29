@@ -66,8 +66,4 @@ python Function/core/Game_env.py
 - Add networked multiplayer, new weapons, or smoother physics.
 
 **License & Contribution**
-- This project currently has no license file. Add one (for example `MIT`) if you want to allow reuse.
-- Contributions welcome: open an issue or send a pull request with focused changes.
-
----
-Generated README for local development and quick start.
+- This project currently has no license feel free to use the code the way you want.
