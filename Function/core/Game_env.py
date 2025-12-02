@@ -14,245 +14,236 @@ from Function.core.Life import Life
 
 pygame.init()  # Initialiser Pygame
 
-width, height = 1200, 650
-screen = pygame.display.set_mode((width, height))
+class GameEnv:
+    def __init__(self, visualize=True):
+        self.state = None
+        self.visualize = visualize
+        # --- Initialisation son ---
+        self.sons = Son(color_tank_list[:nb_tank])
 
-clock = pygame.time.Clock()
+        self.Terrain_class = Terrain(self.width, self.height)
 
-Terrain_class = Terrain(width, height)
-Terrain_class.generate_terrain()
+        # Créer des nuages
+        self.clouds = [Cloud(self.width, self.height) for _ in range(5)]   # 5 nuages
 
-color_tank_list = ["red", "blue", "green", "yellow"]
+        self.balles = []
+        self.particules = []
+        if self.visualize:
+            self.screen = pygame.display.set_mode((self.width, self.height))
 
-nb_tank = 2
+        
+        self.max_vitesse = 35
 
-Tanks_class = {}
+        self.max_puissance = 35
 
-# --- Création des tanks ---
-for i in range(nb_tank):
-    x_tank_spawn = (i + 1) * (width / (nb_tank + 1))
-    x_tank_spawn -= 42.5
-    color = color_tank_list[i]
+    def reset(self):
 
-    Tanks_class[color] = Tank.Tank(
-        width,
-        height,
-        x_tank_spawn,
-        color
-    )
+        self.Tanks_class = {}
+        # --- Création des tanks ---
+        for i in range(self.nb_tank):
+            x_tank_spawn = (i + 1) * (self.width / (self.nb_tank + 1))
+            x_tank_spawn -= 42.5
+            color = self.color_tank_list[i]
 
-# --- Création des barres de vie (Life class) ---
-life_ui = {
-    "red":  Life("red", scale=0.2),   # ← ici tu règles la taille
-    "blue": Life("blue", scale=0.2)
-}
+            self.Tanks_class[color] = Tank.Tank(
+                self.width,
+                self.height,
+                x_tank_spawn,
+                color
+            )
+        self.Terrain_class.generate_terrain()
+        return self.state
 
+    def Episode(self):
+        pass
 
+    def step(self, action):
+        if self.visualize:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
+        # --------------------- UPDATE BALLES ---------------------
+        for balle in list(self.balles):
+            position_disparition = balle.update(self.Terrain_class.array_terrain)
 
-# Créer des nuages
-clouds = [Cloud(width, height) for _ in range(5)]   # 5 nuages
-
-# --- Instances de base ---
-max_puissance = 35
-max_vitesse2 = 35
-balle = None
-cible = Cible.Cible(width, height)
-afficher_cible = False
-
-balles = []
-particules = []
-score = 0
-
-running = True
-
-# --- Initialisation son ---
-sons = Son(color_tank_list[:nb_tank])
-
-# ---------------------------------------------------------------------------
-#                               BOUCLE DU JEU
-# ---------------------------------------------------------------------------
-while running:
-    # --------------------- ÉVÉNEMENTS ---------------------
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-
-    keys = pygame.key.get_pressed()
-
-    # ------------------ CONTROLES TANK ROUGE ------------------
-    if keys[pygame.K_a]:
-        sons.play_turret("red")
-        Tanks_class["red"].angle = min(180, Tanks_class["red"].angle + 0.8)
-    elif keys[pygame.K_e]:
-        sons.play_turret("red")
-        Tanks_class["red"].angle = max(0, Tanks_class["red"].angle - 0.8)
-    else:
-        sons.turret_playing["red"] = False
-
-    if keys[pygame.K_s]:
-        Tanks_class["red"].puissance = max(5, Tanks_class["red"].puissance - 0.3)
-    if keys[pygame.K_z]:
-        Tanks_class["red"].puissance = min(max_vitesse2, Tanks_class["red"].puissance + 0.3)
-
-    if keys[pygame.K_q]:
-        Tanks_class["red"].x -= Tanks_class["red"].vitesse
-    if keys[pygame.K_d]:
-        Tanks_class["red"].x += Tanks_class["red"].vitesse
-
-    if keys[pygame.K_f] and Tanks_class["red"].can_shoot:
-        cannon_end_x, cannon_end_y = Tanks_class["red"].draw(screen, Terrain_class.array_terrain)
-        angle = math.radians(Tanks_class["red"].angle) + math.radians(Tanks_class["red"].z_rotation)
-        angle = math.degrees(angle)
-        sons.play_shoot()
-        balles.append(Balle.Balle(
-            width, height, cannon_end_x, cannon_end_y,
-            5, angle, Tanks_class["red"].puissance,
-            Tanks_class["red"].vitesse * Tanks_class["red"].direction,
-            owner=Tanks_class["red"], color_tank ="red"
-            ))
-        Tanks_class["red"].can_shoot = False
-
-    # ------------------ CONTROLES TANK BLEU ------------------
-    if keys[pygame.K_i]:
-        sons.play_turret("blue")
-        Tanks_class["blue"].angle = min(180, Tanks_class["blue"].angle + 0.8)
-    elif keys[pygame.K_p]:
-        sons.play_turret("blue")
-        Tanks_class["blue"].angle = max(0, Tanks_class["blue"].angle - 0.8)
-    else:
-        sons.turret_playing["blue"] = False
-
-    if keys[pygame.K_l]:
-        Tanks_class["blue"].puissance = max(5, Tanks_class["blue"].puissance - 0.3)
-    if keys[pygame.K_o]:
-        Tanks_class["blue"].puissance = min(max_vitesse2, Tanks_class["blue"].puissance + 0.3)
-
-    if keys[pygame.K_k]:
-        Tanks_class["blue"].x -= Tanks_class["blue"].vitesse
-    if keys[pygame.K_m]:
-        Tanks_class["blue"].x += Tanks_class["blue"].vitesse
-
-    if keys[pygame.K_j] and Tanks_class["blue"].can_shoot:
-        cannon_end_x, cannon_end_y = Tanks_class["blue"].draw(screen, Terrain_class.array_terrain)
-        angle = math.radians(Tanks_class["blue"].angle) + math.radians(Tanks_class["blue"].z_rotation)
-        angle = math.degrees(angle)
-        sons.play_shoot()
-        balles.append(Balle.Balle(
-            width, height, cannon_end_x, cannon_end_y,
-            5, angle, Tanks_class["blue"].puissance,
-            Tanks_class["blue"].vitesse * Tanks_class["blue"].direction,
-            owner=Tanks_class["blue"], color_tank = "blue"
-        ))
-        Tanks_class["blue"].can_shoot = False
-
-    # --------------------- UPDATE BALLES ---------------------
-    for balle in list(balles):
-        position_disparition = balle.update(Terrain_class.array_terrain)
-
-        if position_disparition:
-            #Terrain_class.change_terrain_at(balle.x, balle.y, radius=16)
-            balle.owner.can_shoot = True
-
-            # particules explosion
-            for _ in range(100):
-                particules.append(
-                    Particule.Particule(position_disparition[0], position_disparition[1], balle.color)
-                )
-
-    # --------------------- LIMITE DU TERRAIN ---------------------
-    for tank_name in Tanks_class:
-        if Tanks_class[tank_name].x < 0:
-            Tanks_class[tank_name].x = 0
-        if Tanks_class[tank_name].x > width - ( Tanks_class[tank_name].draw_width + 1 ):
-            Tanks_class[tank_name].x = width - ( Tanks_class[tank_name].draw_width +1 )
-
-    for cloud in clouds:
-        cloud.update()
-
-    # --------------------- DESSIN ÉCRAN ---------------------
-    screen.fill((0,110,220))
-    Terrain_class.draw_ground(screen)
-
-    for cloud in clouds:
-        cloud.draw(screen)
-
-
-    # --------------------- DESSIN TANKS ---------------------
-    for tank_name in Tanks_class:
-        Tanks_class[tank_name].draw(screen, Terrain_class.array_terrain)
-
-    # --------------------- DESSIN BALLES ---------------------
-    for balle in list(balles):
-        if balle.visible:
-            balle.draw(screen)
-        else:
-            balles.remove(balle)
-            continue
-
-        # ------------------ COLLISION BALLE / TANK ------------------
-        for name, tank in Tanks_class.items():
-
-            if tank == balle.owner:
-                continue
-
-            if tank.hit(balle):
-
-                print(getattr(Fore, name.upper()) + f"{name} touché !" + Style.RESET_ALL)
-
-                tank.hp -= 1
-
-                sons.play_hit()
-
-                if tank.hp <= 0:
-                    print(getattr(Fore, name.upper()) + f"{name} LOSE !" + Style.RESET_ALL)
-
+            if position_disparition:
+                #Terrain_class.change_terrain_at(balle.x, balle.y, radius=16)
                 balle.owner.can_shoot = True
 
-                balle.visible = False
-                balles.remove(balle)
-                break
+                # particules explosion
+                for _ in range(100):
+                    self.particules.append(
+                        Particule.Particule(position_disparition[0], position_disparition[1], balle.color)
+                    )
 
-    # --------------------- AFFICHAGE DES VIES ---------------------
-    # Tank rouge (haut gauche)
-    life_ui["red"].draw(
-        screen,
-        Tanks_class["red"].hp,
-        Tanks_class["red"].hp_max,
-        x=10,
-        y=600
-    )
-
-    # Tank bleu (haut droite)
-    life_ui["blue"].draw(
-        screen,
-        Tanks_class["blue"].hp,
-        Tanks_class["blue"].hp_max,
-        x=width - (Tanks_class["blue"].hp_max * 50),  # auto-aligné
-        y=600
-    )
+        # --------------------- LIMITE DU TERRAIN ---------------------
+        for tank_name in self.Tanks_class:
+            if self.Tanks_class[tank_name].x < 0:
+                self.Tanks_class[tank_name].x = 0
+            if self.Tanks_class[tank_name].x > self.width - ( self.Tanks_class[tank_name].draw_width + 1 ):
+                self.Tanks_class[tank_name].x = self.width - ( self.Tanks_class[tank_name].draw_width +1 )
+        for cloud in self.clouds:
+            cloud.update()
 
 
-    # --------------------- PARTICULES ---------------------
-    for particule in particules:
-        particule.update(Terrain_class.array_terrain)
-        particule.draw(screen)
+        # --------------------- DESSIN TANKS ---------------------
+        for tank_name in self.Tanks_class:
+            self.Tanks_class[tank_name].draw(self.screen, self.Terrain_class.array_terrain)
 
-    particules = [p for p in particules if p.lifetime > 0]
+        # --------------------- DESSIN BALLES ---------------------
+        for balle in list(balles):
+            if balle.visible:
+                balle.draw(self.screen)
+            else:
+                self.balles.remove(balle)
+                continue
 
-    # --------------------- UI ---------------------
-    font = pygame.font.Font(None, 36)
+            # ------------------ COLLISION BALLE / TANK ------------------
+            for name, tank in self.Tanks_class.items():
 
-    # ROUGE
-    screen.blit(font.render(f"Vitesse: {round(Tanks_class['red'].puissance)}", True, (255, 255, 255)), (10, 10))
-    screen.blit(font.render(f"Angle: {round(Tanks_class['red'].angle)}°", True, (255, 255, 255)), (10, 50))
-    screen.blit(font.render(f"Score: {score}", True, (255, 255, 255)), (10, 90))
+                if tank == balle.owner:
+                    continue
 
-    # BLEU
-    screen.blit(font.render(f"Vitesse: {round(Tanks_class['blue'].puissance)}", True, (255, 255, 255)), (1040, 10))
-    screen.blit(font.render(f"Angle: {round(Tanks_class['blue'].angle)}°", True, (255, 255, 255)), (1040, 50))
-    screen.blit(font.render(f"Score: {score}", True, (255, 255, 255)), (1040, 90))
+                if tank.hit(balle):
 
-    pygame.display.flip()
-    clock.tick(60)
+                    print(getattr(Fore, name.upper()) + f"{name} touché !" + Style.RESET_ALL)
 
-pygame.quit()
+                    tank.hp -= 1
+
+                    self.sons.play_hit()
+
+                    if tank.hp <= 0:
+                        print(getattr(Fore, name.upper()) + f"{name} LOSE !" + Style.RESET_ALL)
+
+                    balle.owner.can_shoot = True
+
+                    balle.visible = False
+                    self.balles.remove(balle)
+                    break
+    
+    def take_action(self, action):
+        return self.step(action)
+    
+    def get_human_action(self):
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_a]:
+            self.sons.play_turret("red")
+            self.Tanks_class["red"].angle = min(180, self.Tanks_class["red"].angle + 0.8)
+        elif keys[pygame.K_e]:
+            self.sons.play_turret("red")
+            self.Tanks_class["red"].angle = max(0, self.Tanks_class["red"].angle - 0.8)
+        else:
+            self.sons.turret_playing["red"] = False
+
+        if keys[pygame.K_s]:
+            self.Tanks_class["red"].puissance = max(5, self.Tanks_class["red"].puissance - 0.3)
+        if keys[pygame.K_z]:
+            self.Tanks_class["red"].puissance = min(self.max_vitesse, self.Tanks_class["red"].puissance + 0.3)
+
+        if keys[pygame.K_q]:
+            self.Tanks_class["red"].x -= self.Tanks_class["red"].vitesse
+        if keys[pygame.K_d]:
+            self.Tanks_class["red"].x += self.Tanks_class["red"].vitesse
+
+        if keys[pygame.K_f] and self.Tanks_class["red"].can_shoot:
+            cannon_end_x, cannon_end_y = self.Tanks_class["red"].draw(self.screen, self.Terrain_class.array_terrain)
+            angle = math.radians(self.Tanks_class["red"].angle) + math.radians(self.Tanks_class["red"].z_rotation)
+            angle = math.degrees(angle)
+            self.sons.play_shoot()
+            self.balles.append(Balle.Balle(
+                self.width, self.height, cannon_end_x, cannon_end_y,
+                5, angle, self.Tanks_class["red"].puissance,
+                self.Tanks_class["red"].vitesse * self.Tanks_class["red"].direction,
+                owner=self.Tanks_class["red"], color_tank ="red"
+                ))
+            self.Tanks_class["red"].can_shoot = False
+
+        # ------------------ CONTROLES TANK BLEU ------------------
+        if keys[pygame.K_i]:
+            self.sons.play_turret("blue")
+            self.Tanks_class["blue"].angle = min(180, self.Tanks_class["blue"].angle + 0.8)
+        elif keys[pygame.K_p]:
+            self.sons.play_turret("blue")
+            self.Tanks_class["blue"].angle = max(0, self.Tanks_class["blue"].angle - 0.8)
+        else:
+            self.sons.turret_playing["blue"] = False
+
+        if keys[pygame.K_l]:
+            self.Tanks_class["blue"].puissance = max(5, self.Tanks_class["blue"].puissance - 0.3)
+        if keys[pygame.K_o]:
+            self.Tanks_class["blue"].puissance = min(self.max_vitesse, self.Tanks_class["blue"].puissance + 0.3)
+
+        if keys[pygame.K_k]:
+            self.Tanks_class["blue"].x -= self.Tanks_class["blue"].vitesse
+        if keys[pygame.K_m]:
+            self.Tanks_class["blue"].x += self.Tanks_class["blue"].vitesse
+
+        if keys[pygame.K_j] and self.Tanks_class["blue"].can_shoot:
+            cannon_end_x, cannon_end_y = self.Tanks_class["blue"].draw(self.screen, self.Terrain_class.array_terrain)
+            angle = math.radians(self.Tanks_class["blue"].angle) + math.radians(self.Tanks_class["blue"].z_rotation)
+            angle = math.degrees(angle)
+            self.sons.play_shoot()
+            self.balles.append(Balle.Balle(
+                self.width, self.height, cannon_end_x, cannon_end_y,
+                5, angle, self.Tanks_class["blue"].puissance,
+                self.Tanks_class["blue"].vitesse * self.Tanks_class["blue"].direction,
+                owner=self.Tanks_class["blue"], color_tank = "blue"
+            ))
+            self.Tanks_class["blue"].can_shoot = False
+    
+    def _get_observation(self):
+        pass
+
+    def _execute_action(self, action):
+        pass
+
+    def render(self):
+        # --------------------- DESSIN ÉCRAN ---------------------
+        self.screen.fill((0,110,220))
+        self.Terrain_class.draw_ground(self.screen)
+
+        for cloud in self.clouds:
+            cloud.draw(self.screen)
+        
+        # --------------------- AFFICHAGE DES VIES ---------------------
+        # Tank rouge (haut gauche)
+        self.life_ui["red"].draw(
+            self.screen,
+            self.Tanks_class["red"].hp,
+            self.Tanks_class["red"].hp_max,
+            x=10,
+            y=600
+        )
+
+        # Tank bleu (haut droite)
+        self.life_ui["blue"].draw(
+            self.screen,
+            self.Tanks_class["blue"].hp,
+            self.Tanks_class["blue"].hp_max,
+            x=self.width - (self.Tanks_class["blue"].hp_max * 50),  # auto-aligné
+            y=600
+        )
+
+
+        # --------------------- PARTICULES ---------------------
+        for particule in particules:
+            particule.update(self.Terrain_class.array_terrain)
+            particule.draw(self.screen)
+
+        particules = [p for p in particules if p.lifetime > 0]
+
+        # --------------------- UI ---------------------
+        font = pygame.font.Font(None, 36)
+
+        # ROUGE
+        self.screen.blit(font.render(f"Vitesse: {round(self.Tanks_class['red'].puissance)}", True, (255, 255, 255)), (10, 10))
+        self.screen.blit(font.render(f"Angle: {round(self.Tanks_class['red'].angle)}°", True, (255, 255, 255)), (10, 50))
+        self.screen.blit(font.render(f"Score: {self.score}", True, (255, 255, 255)), (10, 90))
+
+        # BLEU
+        self.screen.blit(font.render(f"Vitesse: {round(self.Tanks_class['blue'].puissance)}", True, (255, 255, 255)), (1040, 10))
+        self.screen.blit(font.render(f"Angle: {round(self.Tanks_class['blue'].angle)}°", True, (255, 255, 255)), (1040, 50))
+        self.screen.blit(font.render(f"Score: {self.score}", True, (255, 255, 255)), (1040, 90))
+
+        pygame.display.flip()
+        self.clock.tick(60)
