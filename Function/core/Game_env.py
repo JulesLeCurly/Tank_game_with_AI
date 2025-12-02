@@ -150,7 +150,7 @@ while running:
         position_disparition = balle.update(Terrain_class.array_terrain)
 
         if position_disparition:
-            Terrain_class.change_terrain_at(balle.x, balle.y, radius=16)
+            #Terrain_class.change_terrain_at(balle.x, balle.y, radius=16)
             balle.owner.can_shoot = True
 
             # particules explosion
