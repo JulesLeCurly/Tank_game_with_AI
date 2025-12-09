@@ -91,7 +91,7 @@ class GameEnv:
             self.Tanks_class[tank_name].draw(self.screen, self.Terrain_class.array_terrain)
 
         # --------------------- DESSIN BALLES ---------------------
-        for balle in list(balles):
+        for balle in list(self.balles):
             if balle.visible:
                 balle.draw(self.screen)
             else:
